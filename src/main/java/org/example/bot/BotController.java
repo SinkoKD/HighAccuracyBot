@@ -33,7 +33,7 @@ public class BotController {
 
     public static void main(String[] args) throws URISyntaxException {
         String TOKEN = "";
-        String AdminID = "710511911";
+        String AdminID = "5674163986";
         try {
             String configFilePath = "src/config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
@@ -59,11 +59,6 @@ public class BotController {
                     String messageCallbackText = "";
                     String uid;
                     int messageId;
-//                    Path resourcePath = Paths.get("src/main/resources");
-//                    File videoDepositFile = resourcePath.resolve("depositTutorial.mp4").toFile();
-//                    File videoRegistrationFile = resourcePath.resolve("videoRegistrationGuide.mp4").toFile();
-//                    File videoExampleFile = resourcePath.resolve("videoExample.mp4").toFile();
-
 
                     if (update.callbackQuery() == null && (update.message() == null || update.message().text() == null)) {
                         return;
@@ -97,12 +92,12 @@ public class BotController {
                         }
                     }
 
-//
-//                    String userKeyAdmin = USER_DB_MAP_KEY + ":" + AdminID;
-//                    String userKeyIm = USER_DB_MAP_KEY + ":" + "430823029";
-//                    Date adminDate = new Date();
-//                    User adminUser = new User("Admin", "64", false, false, adminDate, adminDate, 1, false, false, false);
-//                    jedis.set(userKeyAdmin, convertUserToJson(adminUser));
+
+                    String userKeyAdmin = USER_DB_MAP_KEY + ":" + AdminID;
+                    String userKeyIm = USER_DB_MAP_KEY + ":" + "430823029";
+                    Date adminDate = new Date();
+                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50);
+                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
                     //        User I'm = new User("NoAdmin", "430823029", true, true, adminDate, 1, true);
                     //       jedis.set(userKeyIm, convertUserToJson(Im));
 
@@ -128,22 +123,31 @@ public class BotController {
                                     if (checkUserDate.getTime() < currentDate.getTime()) {
                                         String userTgID = keyForUser.substring(10);
                                         if (currentUser.isDeposited() && currentUser.getTimesTextWasSent() == 1) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 I received an update, now my signals have become even more accurate! This is a great opportunity to earn money. Try trading with me for the next 8 hours. ").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCC8\uD83D\uDCB8\uD83D\uDD52 I've received an update, and now my signals are even more accurate! " +
+                                                    "This presents a fantastic opportunity to earn money. Let's give trading a shot for the next 8 hours.").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (currentUser.isDeposited() && currentUser.getTimesTextWasSent() == 2) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 The market is in a fantastic state at the moment. It's the ideal time to trade and make easy money! Only 4 hours left until the market is awesome.").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCC8 The market is currently in fantastic shape! It's the perfect time " +
+                                                    "to trade and potentially make some easy money! " +
+                                                    " There are only 4 hours left until the market is expected to be awesome. Don't miss out! \uD83D\uDCB0\uD83D\uDD52").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 1) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 The final step to receiving signals is left! Everything can be done quickly and conveniently for you! If you encounter any issues while depositing, please review the video above. Also use promo code 50START to receive bonus to your deposit.").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDE80\uD83E\uDD11 You're almost there, just one more step to start receiving signals! " +
+                                                    "It's quick and convenient for you. Don't forget to use the promo code \"50START\" to receive a bonus on your deposit.").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 2) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 It seems you still don't want to start earning. After depositing, you will gain access to my accurate signals. I'm not human, but my analysis indicates that you're making a mistake by not working with me.").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCB0\uD83D\uDCC8 It appears you're eager to start earning. Once you've made your deposit, you'll gain " +
+                                                    "access to my accurate signals, and we can begin trading. Let's get started! ").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (!currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 1) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 I want to remind you that for registration, you need to create a new account using this link: https://bit.ly/ChatGPTtrading. It won't take more than 2 minutes. You can also review the video above, it should help you. I'm ready to give you my signals.").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCCA\uD83D\uDD17 I'd like to remind you that for registration, you should create a new account " +
+                                                    "using this link: [https://bit.ly/ChatGPTtrading](https://bit.ly/ChatGPTtrading). It'll only take a couple of minutes, " +
+                                                    "and I'm ready to receive your signals once it's done. Let's proceed! ").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (!currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 2) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDD14 I want to remind you that signing up doesn't require much time! Just make a new account using this link: https://bit.ly/ChatGPTtrading. (This is the final reminder, if you don't manage to create an account within the next 3 days, you won't get access to my signals)").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "⏳\uD83D\uDCCA\uD83D\uDD17 I want to emphasize that signing up is a quick process! Simply create a new " +
+                                                    "account using this link: [https://bit.ly/ChatGPTtrading](https://bit.ly/ChatGPTtrading). (This is the final reminder, " +
+                                                    "if you don't manage to create an account within the next 3 days, you won't get access to my signals) ").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         }
                                     }
@@ -165,13 +169,13 @@ public class BotController {
                                 String tgID = messageText.substring(1);
                                 System.out.println(tgID);
                                 registrationApprove(Long.parseLong(tgID));
-                                bot.execute(new SendMessage(tgID, "✅ Great, your account is confirmed! The last step is to make any deposit at least 50$ by any convenient way. After that press the button 'Deposit done'.\n" +
-                                        "\n" +
-                                        "I would like to note that the recommended starting deposit of $50 - $350. Also use promo code 50START to get an extra 50% of your deposit. For example, with a deposit of 100$ you will get 50$ additional. It means that you will get 150$ in total.\n" +
-                                        "\n" +
-                                        "At the bottom there is a video instruction on how to top up the account.").replyMarkup(inlineKeyboardMarkup));
-                        //        bot.execute(new SendVideo(tgID, videoDepositFile));
-                                bot.execute(new SendMessage(tgID, "☝️ Here is a video guide on how to make a deposit.").parseMode(HTML));
+                                bot.execute(new SendMessage(tgID, "✅ Fantastic, your account is confirmed! T" +
+                                        "he final step is to make a deposit of at least $50 using any convenient method. " +
+                                        "After that, click the 'Deposit done' button. \uD83D\uDCB0\uD83D\uDC4D\n" + "\n" +
+                                        "\uD83C\uDF1F\uD83D\uDCB8 I'd like to mention that it's recommended to start with a deposit of $50 - $350. Additionally, you can use " +
+                                        "the promo code \"50START\" to receive an extra 50% of your deposit. " +
+                                        "For instance, if you deposit $100, you'll receive an additional $50, making it a total of $150. \n"
+                                ).replyMarkup(inlineKeyboardMarkup));
                                 bot.execute(new SendMessage(AdminID, "Registration for " + tgID + " was approved"));
                                 setTo1TimesWasSent(tgID);
                             } catch (Exception e) {
@@ -198,7 +202,7 @@ public class BotController {
                             try {
                                 String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(11));
                                 User userBanned = convertJsonToUser(jedis.get(TGId));
-                                userBanned.setCanWriteToSupport(true);
+                                userBanned.setCanWriteToSupport(false);
                                 String updatedBannedUser = convertUserToJson(userBanned);
                                 jedis.set(TGId, updatedBannedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " was banned to write to support"));
@@ -261,12 +265,12 @@ public class BotController {
                             bot.execute(new SendMessage(AdminID, "There is " + size + " users right now."));
                         } else if (messageText.startsWith("setCheckForUID:")) {
                             try {
-                        //        long newCheck = Integer.parseInt(messageText.substring(15));
-                        //        User adminUser = convertJsonToUser(jedis.get(AdminID));
-                         //       adminUser.setUID(String.valueOf(newCheck));
-                         //       String updatedAdminUser = convertUserToJson(adminUser);
-                          //      jedis.set(AdminID, updatedAdminUser);
-                          //      bot.execute(new SendMessage(AdminID, "First numbers is: " + newCheck + "."));
+                                long newCheck = Integer.parseInt(messageText.substring(15));
+                                User adminUser = convertJsonToUser(jedis.get(AdminID));
+                                adminUser.setUID(String.valueOf(newCheck));
+                                String updatedAdminUser = convertUserToJson(adminUser);
+                                jedis.set(AdminID, updatedAdminUser);
+                                bot.execute(new SendMessage(AdminID, "First numbers is: " + newCheck + "."));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -288,14 +292,14 @@ public class BotController {
                         } else if (messageText.startsWith("D") || messageText.startsWith("d") || messageText.startsWith("В") || messageText.startsWith("в")) {
                             String tgID = messageText.substring(1);
                             InlineKeyboardButton button12 = new InlineKeyboardButton("Register here");
-                            InlineKeyboardButton button13 = new InlineKeyboardButton("I'm ready!");
+                            InlineKeyboardButton button13 = new InlineKeyboardButton("Registered");
                             button12.url("https://bit.ly/ChatGPTtrading");
                             button13.callbackData("ImRegistered");
                             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                             inlineKeyboardMarkup.addRow(button12, button13);
-                            bot.execute(new SendMessage(tgID, "❌ Something went wrong. Make sure you registered with the 'Register here' button and sent a new UID. There is an example of how to do it step by step in the video below. After that press the 'I'm ready!'\n" +
-                                    "\n" +
-                                    "If you still have problems, then write to support with the command /support. ").replyMarkup(inlineKeyboardMarkup));
+                            bot.execute(new SendMessage(tgID, "❌ Your ID is invalid. Please make sure you registered using the 'Register here' " +
+                                    "button and sent a new UID. After registering, press 'Registered' again. \uD83D\uDE4F\n" + "\n" +
+                                    "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further. ").replyMarkup(inlineKeyboardMarkup));
                             bot.execute(new SendMessage(AdminID, "Registration for " + tgID + " was disapproved"));
                         } else if (messageText.startsWith("Y") || messageText.startsWith("y") || messageText.startsWith("Н") || messageText.startsWith("н")) {
                             try {
@@ -304,11 +308,14 @@ public class BotController {
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
                                         new String[]{"Get Signal"});
                                 bot.execute(new SendMessage(AdminID, "Deposit for " + tgID + " was approved"));
-                                bot.execute(new SendMessage(tgID, "✅ Great! Everything is ready! You can start getting signals. For this click on 'Get Signal' or write it manually. \n" +
-                                        "\n" +
-                                        "Below is a video guide on how to use signals from me. \n" +
-                                        "\n" +
-                                        "If you have any questions use the /support command.").replyMarkup(replyKeyboardMarkup));
+                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80\uD83D\uDCCA Awesome! Everything is set up and ready to go! You can start receiving signals now. Just click on '/newsignal' or type it manually.  \n" +
+                                        "\n"  +
+                                        "<b>❗️IMPORTANT ❗️</b> \n\n" +
+                                        "<i>1⃣ I am analyzing only the real market, so I won't work on a demo properly. To achieve better accuracy, trade on a real account.\n\n" +
+                                        "2⃣ I analyze all successful and failed signals. The more signals you get, the better they become.\n\n" +
+                                        "3⃣ The recommended amount to use for trading is 15-20% per trade.</i>\n\n" +
+                                        "Below is a video guide on how to use signals from me. \n" + "\n" +
+                                        "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").replyMarkup(replyKeyboardMarkup));
                                 setTo1TimesWasSent(tgID);
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -320,12 +327,13 @@ public class BotController {
                             InlineKeyboardButton button7 = new InlineKeyboardButton("Deposit done");
                             button7.callbackData("IDeposit");
                             inlineKeyboardMarkup.addRow(button7);
-                            bot.execute(new SendMessage(tgID, "❌ Something went wrong. Make sure you deposited at least 50$ to the new account you created through the link and then click 'Deposit done' ").replyMarkup(inlineKeyboardMarkup));
+                            bot.execute(new SendMessage(tgID, "❌ Something went wrong. Please ensure that you have deposited at least $50 into the new account " +
+                                    "you created through the link, and then click on 'Deposit done'. \uD83D\uDCE5\uD83D\uDCB0✔\uFE0F").replyMarkup(inlineKeyboardMarkup));
                             bot.execute(new SendMessage(AdminID, "Deposit for " + tgID + " was disapproved"));
                         }
-                    } else if (messageText.startsWith("needReply:")) {
+                    } else if (messageText.startsWith("#question:")) {
                         String userQuestion = messageText.substring(10);
-                        if (!userCanWriteToSupport(playerId)) {
+                        if (userCanWriteToSupport(playerId)) {
                             bot.execute(new SendMessage(playerId, "✅ Our admin will reply you shortly!" + userQuestion).parseMode(HTML));
                             bot.execute(new SendMessage(AdminID, "✅ ID:<code>" + playerId + "</code> has a question" + userQuestion + " To answer it write a message: <code>reply:111111111&</code> *your text*").parseMode(HTML));
                         } else {
@@ -336,7 +344,7 @@ public class BotController {
                                 "paste <code>#question:</code> in the chat, write your question, send the message, and wait for our admin to respond shortly. \uD83D\uDCE9").parseMode(HTML));
                     } else if (messageText.equals("/start")) {
                         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                        InlineKeyboardButton button32 = new InlineKeyboardButton("Let's start");
+                        InlineKeyboardButton button32 = new InlineKeyboardButton("Next Step!");
                         button32.callbackData("RegisterMe");
                         inlineKeyboardMarkup.addRow(button32);
                         if (!allUsers.contains(playerId)) {
@@ -344,10 +352,13 @@ public class BotController {
                         }
                         bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Hey, " + playerName + "\n" +
                                 "\n" +
-                                "\uD83D\uDCC8 I am the HighAccuracyTrade Bot, and I am created to provide highly accurate trading signals. I use market analysis to calculate the probabilities of where currency pairs might go. All you need to do is simply copy my signals and start making money!\uD83D\uDCC8 \n" +
+                                "\uD83D\uDCC8 I am the HighAccuracyTrade Bot, and I am created to provide highly accurate trading signals. " +
+                                "I use market analysis to calculate the probabilities of where currency pairs might go. " +
+                                "All you need to do is simply copy my signals and start making money!\uD83D\uDCC8 \n" +
                                 "\n" +
                                 "To begin receiving signals, just start by clicking on 'Next Step!'. \uD83D\uDCCA\n").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
-                        bot.execute(new SendMessage(playerId, "If you ever run into any issues or have suggestions, you can reach out to our bot support using the /help command. ❗\uFE0F").parseMode(HTML));
+                        bot.execute(new SendMessage(playerId, "If you ever run into any issues or have suggestions, " +
+                                "you can reach out to our bot support using the /help command. ❗\uFE0F").parseMode(HTML));
                     } else if (userDeposited(playerId) || userDeposited(playerId)) {
                         if (messageText.equals("/newSignal") || messageCallbackText.equals("getSignal") || messageText.equals("/newsignal")) {
                             List<String> listOfPairs = Arrays.asList(
@@ -364,7 +375,7 @@ public class BotController {
                                 try {
                                     Thread.sleep(1500);
                                 } catch (InterruptedException e) {
-                                    bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                     e.printStackTrace();
                                 }
                                 Random random = new Random();
@@ -376,18 +387,16 @@ public class BotController {
                                 } else {
                                     direction = "\uD83D\uDD34⬇\uFE0F Signal: <b>DOWN</b> ";
                                 }
-                                //int randomAccuracy = random.nextInt(20) + 80;
-                                int randomAccuracy = 99;
+                                int randomAccuracy = random.nextInt(20) + 80;
                                 int randomAddTime = random.nextInt(10000) + 8000;
-                                //   int randomTime = random.nextInt(3) + 1;
-                                int randomTime =  1;
+                                   int randomTime = random.nextInt(3) + 1;
                                 String pickedPair = listOfPairs.get(randomNumber);
                                 EditMessageText editMessageText = new EditMessageText(playerId, messageId + 1, "\uD83D\uDFE2\uD83D\uDFE2").parseMode(HTML);
                                 bot.execute(editMessageText);
                                 try {
                                     Thread.sleep(1500);
                                 } catch (InterruptedException e) {
-                                    bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again."));
                                     e.printStackTrace();
                                 }
                                 EditMessageText editMessageTex = new EditMessageText(playerId, messageId + 1, "\uD83D\uDFE2\uD83D\uDFE2\uD83D\uDFE2").parseMode(HTML);
@@ -395,7 +404,7 @@ public class BotController {
                                 try {
                                     Thread.sleep(1500);
                                 } catch (InterruptedException e) {
-                                    bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again."));
                                     e.printStackTrace();
                                 }
                                 EditMessageText editMessageText4 = new EditMessageText(playerId, messageId + 1, "\uD83D\uDCC8The <b>" + pickedPair + "</b> asset is currently being analyzed.").parseMode(HTML);
@@ -403,7 +412,7 @@ public class BotController {
                                 try {
                                     Thread.sleep(3000);
                                 } catch (InterruptedException e) {
-                                    bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again."));
                                     e.printStackTrace();
                                 }
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -456,12 +465,12 @@ public class BotController {
                                     jedis.set(userKey, updatedUser);
                                     String sendAdminUID = checkedUser.getUID();
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE1 deposited. Write 'Y11111111' (telegram id) to approve and 'N1111111' to disapprove").parseMode(HTML));
-                                    bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Great your deposit will be checking soon."));
+                                    bot.execute(new SendMessage(playerId, "Awesome! Your deposit will be checked shortly. \uD83C\uDF89\uD83D\uDC4D"));
                                 } else {
                                     if (userDate.getTime() <= currentDate.getTime()) {
                                         String sendAdminUID = checkedUser.getUID();
                                         bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE1 deposited. Write 'Y11111111' (telegram id) to approve and 'N1111111' to disapprove").parseMode(HTML));
-                                        bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Great your deposit will be checking soon."));
+                                        bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Awesome! Your deposit will be checked shortly. \uD83C\uDF89\uD83D\uDC4D"));
                                     } else {
                                         bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Please wait 30 minutes before next time pressing button."));
                                     }
@@ -475,29 +484,27 @@ public class BotController {
                         } else if (userDeposited(playerId)) {
                             bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                         } else if (messageText.startsWith("/") || messageText.equals("Get Signal")) {
-                            bot.execute(new SendMessage(playerId, "Before trying any signals you need to deposit"));
+                            bot.execute(new SendMessage(playerId, "Before you can give any signals a try, you'll need to make a deposit first. \uD83D\uDCB0\uD83E\uDD1D"));
                         }
                     } else {
                         if (messageText.equals("/register") || messageCallbackText.equals("RegisterMe")) {
                             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                            InlineKeyboardButton button2 = new InlineKeyboardButton("Register here");
-                            InlineKeyboardButton button3 = new InlineKeyboardButton("I'm ready!");
+                            InlineKeyboardButton button2 = new InlineKeyboardButton("Click me and send UID below!");
                             button2.url("https://bit.ly/ChatGPTtrading");
-                            button3.callbackData("ImRegistered");
-                            inlineKeyboardMarkup.addRow(button2, button3);
-                            bot.execute(new SendMessage(playerId, "✅ Great job! To get started, you need to create a new account on the Pocket Option platform through the button below. \n" +
+                            inlineKeyboardMarkup.addRow(button2);
+                            bot.execute(new SendMessage(playerId, "\uD83D\uDE80\uD83D\uDCC8  Well done! To begin, you should create a fresh account on the Pocket Option platform using the button below. \n" +
                                     "\n" +
                                     " \uD83D\uDD17 bit.ly/ChatGPTtrading \n" +
                                     "\n" +
-                                    "\uD83D\uDCD7 After registering, click on the 'I'm ready!\n" +
+                                    "\uD83D\uDCD7 After registering, send me your ID in format <i>ID12345678</i>\n" +
                                     "\n" +
-                                    "⚠️ Be sure to register using the button 'Register' below or link from the message. Otherwise, the bot will not be able to confirm that you have joined the team. \n" +
+                                    "\uD83E\uDD16\uD83D\uDD17 Make sure to register using the button below or the link in the message. Otherwise, we won't be able to verify that you've joined the team.  \n" +
                                     "\n" +
-                                    "‼️ It's important to note that if you already have an existing Pocket Option account, it's possible to delete and create a new one, and after you can go through the personality verification process again in your new account. This process of deleting and creating a new account is authorized and permitted by Pocket Option administrators.").replyMarkup(inlineKeyboardMarkup).parseMode(HTML).disableWebPagePreview(true));
+                                    "‼️ Please keep in mind that if you already have an existing Pocket Option account, you can delete it and create a new one. Afterward, you can go through the personality verification process again in your new account. This procedure of deleting and creating a new account is authorized and allowed by Pocket Option administrators. \uD83D\uDD04\uD83D\uDCCB").replyMarkup(inlineKeyboardMarkup).parseMode(HTML).disableWebPagePreview(true));
          //
                         } else if (messageCallbackText.equals("ImRegistered")) {
-                            bot.execute(new SendMessage(playerId, "✅ Good job! Now send me your Pocket Option ID in format 'ID12345678'.").parseMode(HTML));
-                        } else if (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11) {
+                            bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
+                        }  else if (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
@@ -509,8 +516,8 @@ public class BotController {
                                 uid = text.substring(2, 10);
                                 Date date = new Date();
                                 Date depositDate = DateUtil.addDays(date, -1);
-                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, false, false, false);
-                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Your ID is " + uid + " is it correct?").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
+                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50);
+                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID  " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
@@ -529,8 +536,8 @@ public class BotController {
                                 uid = text.substring(4, 12);
                                 Date date = new Date();
                                 Date depositDate = DateUtil.addDays(date, -1);
-                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, false, false, false);
-                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Your ID is " + uid + " is it correct?").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
+                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50);
+                                bot.execute(new SendMessage(playerId, "\\uD83D\\uDCCC Is your ID  \" + uid + \" correct? ✅\\uD83C\\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
@@ -542,27 +549,27 @@ public class BotController {
                             try {
                                 User user = convertJsonToUser(jedis.get(userKey));
                                 String sendAdminUID = user.getUID();
-                                User adminUser2 = convertJsonToUser(jedis.get(AdminID));
-                                if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt("60")) {
+                                User adminUser= convertJsonToUser(jedis.get(AdminID));
+                                if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt(adminUser.getUID())) {
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE2 want to register. Write 'A11111111' (telegram id) to approve and 'D1111111' to disapprove").parseMode(HTML));
-                                    bot.execute(new SendMessage(playerId, "⏳ Great, your UID will be verified soon"));
+                                    bot.execute(new SendMessage(playerId, "\uD83C\uDF89\uD83D\uDC4D Awesome! Your ID will be checked shortly."));
                                 } else {
                                     InlineKeyboardButton button12 = new InlineKeyboardButton("Register here");
-                                    InlineKeyboardButton button13 = new InlineKeyboardButton("I'm ready!");
+                                    InlineKeyboardButton button13 = new InlineKeyboardButton("Registered!");
                                     button12.url("https://bit.ly/ChatGPTtrading");
                                     button13.callbackData("ImRegistered");
                                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                     inlineKeyboardMarkup.addRow(button12, button13);
-                                    bot.execute(new SendMessage(playerId, "❌ Something went wrong. You sent me old UID. Make sure you registered with the 'Register here' button and sent a new UID. There is an example of how to do it step by step in the video below. After that press the 'I'm ready!'\n" +
+                                    bot.execute(new SendMessage(playerId, "❌ Your ID is invalid. Please make sure you registered using the 'Register here' button and sent a new UID. After registering, press 'Registered!' again. \uD83D\uDE4F\uD83D\uDD0D\uD83D\uDD04\n" +
                                             "\n" +
-                                            "If you still have problems, then write to support with the command /support. ").replyMarkup(inlineKeyboardMarkup));
+                                            "\uD83C\uDD98\uD83D\uDCDE\uD83D\uDC65 If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").replyMarkup(inlineKeyboardMarkup));
                                 }
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("/") || messageText.equals("Get Signal")) {
-                            bot.execute(new SendMessage(playerId, "Before trying any signals you need to register"));
+                            bot.execute(new SendMessage(playerId, "Before you can try any signals, it's essential to complete the registration process. \uD83D\uDCDD\uD83D\uDD10"));
                         }
                     }
                 });

@@ -9,36 +9,28 @@ import static org.example.bot.BotController.jedisPool;
 public class JedisActions {
     public static boolean userRegistered(long playerId) {
         try (Jedis jedis = jedisPool.getResource()) {
-            System.out.println("userRegistered");
             String userKey = USER_DB_MAP_KEY + ":" + playerId;
             if (!jedis.exists(userKey)) {
-                System.out.println("User not exist registration");
                 return false;
             }
             User checkedUser = convertJsonToUser(jedis.get(userKey));
-            System.out.println("Registered " + checkedUser.getName() + checkedUser.getUID() + "???" + checkedUser.isRegistered());
             return checkedUser.isRegistered();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("False");
             return false;
         }
     }
 
     public static boolean userDeposited(long playerId) {
         try (Jedis jedis = jedisPool.getResource()) {
-            System.out.println("userDeposited");
             String userKey = USER_DB_MAP_KEY + ":" + playerId;
             if (!jedis.exists(userKey)) {
-                System.out.println("User not exist deposit");
                 return false;
             }
             User checkedUser = convertJsonToUser(jedis.get(userKey));
-            System.out.println("Deposit " + checkedUser.getName() + checkedUser.getUID() + "???" + checkedUser.isDeposited());
             return checkedUser.isDeposited();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("False");
             return false;
         }
     }
@@ -47,7 +39,7 @@ public class JedisActions {
         try (Jedis jedis = jedisPool.getResource()) {
             String userKey = USER_DB_MAP_KEY + ":" + playerId;
             if (!jedis.exists(userKey)) {
-                return false;
+                return true;
             }
             User checkedUser = convertJsonToUser(jedis.get(userKey));
             return checkedUser.isCanWriteToSupport();
@@ -59,7 +51,6 @@ public class JedisActions {
 
     public static void registrationApprove(long playerId) {
         try (Jedis jedis = jedisPool.getResource()) {
-            System.out.println("userDeposited");
             String userKey = USER_DB_MAP_KEY + ":" + playerId;
             User checkedUser = convertJsonToUser(jedis.get(userKey));
             checkedUser.setRegistered(true);

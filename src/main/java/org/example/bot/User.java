@@ -14,19 +14,13 @@ public class User implements Serializable {
     private boolean canWriteToSupport;
     private boolean canPressDeposit;
     private boolean canPressRegister;
+    private Integer modeChoose;
+    private Integer minSignalAccuracy;
 
-
-    public boolean isCanWriteToSupport() {
-        return canWriteToSupport;
-    }
-
-    public void setCanWriteToSupport(boolean canWriteToSupport) {
-        this.canWriteToSupport = canWriteToSupport;
-    }
-
-    public User(String name, String UID, boolean registered, boolean deposited, Date lastTimeTexted,
-                Date lastTimePressedDeposit, int timesTextWasSent, boolean canWriteToSupport,
-                boolean canPressDeposit, boolean canPressRegister) {
+    public User(String name, String UID, boolean registered, boolean deposited,
+                Date lastTimeTexted, Date lastTimePressedDeposit,
+                int timesTextWasSent, boolean canWriteToSupport, boolean canPressDeposit,
+                boolean canPressRegister, Integer modeChoose, Integer minSignalAccuracy) {
         this.name = name;
         this.UID = UID;
         this.registered = registered;
@@ -37,6 +31,32 @@ public class User implements Serializable {
         this.canWriteToSupport = canWriteToSupport;
         this.canPressDeposit = canPressDeposit;
         this.canPressRegister = canPressRegister;
+        this.modeChoose = modeChoose;
+        this.minSignalAccuracy = minSignalAccuracy;
+    }
+
+    public boolean isCanWriteToSupport() {
+        return canWriteToSupport;
+    }
+
+    public void setCanWriteToSupport(boolean canWriteToSupport) {
+        this.canWriteToSupport = canWriteToSupport;
+    }
+
+    public Integer getModeChoose() {
+        return modeChoose;
+    }
+
+    public void setModeChoose(Integer modeChoose) {
+        this.modeChoose = modeChoose;
+    }
+
+    public Integer getMinSignalAccuracy() {
+        return minSignalAccuracy;
+    }
+
+    public void setMinSignalAccuracy(Integer minSignalAccuracy) {
+        this.minSignalAccuracy = minSignalAccuracy;
     }
 
     public Date getLastTimePressedDeposit() {
