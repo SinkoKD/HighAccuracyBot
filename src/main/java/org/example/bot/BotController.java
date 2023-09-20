@@ -174,7 +174,7 @@ public class BotController {
                                 bot.execute(new SendMessage(AdminID, "Registration for " + tgID + " was approved"));
                                 setTo1TimesWasSent(tgID);
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("reply:")) {
@@ -190,7 +190,7 @@ public class BotController {
                                 jedis.del(TGId);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " was fully deleted"));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("banSupport:")) {
@@ -202,7 +202,7 @@ public class BotController {
                                 jedis.set(TGId, updatedBannedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " was banned to write to support"));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("banDeposit30:")) {
@@ -215,7 +215,7 @@ public class BotController {
                                 jedis.set(TGId, updatedBannedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " was banned to press button 'Deposit done' for 30 minutes. "));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("deleteDeposit:")) {
@@ -225,7 +225,7 @@ public class BotController {
                                 System.out.println(TGId);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " got deleted"));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("deleteRegistration:")) {
@@ -235,7 +235,7 @@ public class BotController {
                                 System.out.println(TGId);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " got register disapprove"));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("getUserName:")) {
@@ -244,7 +244,7 @@ public class BotController {
                                 User newUser = convertJsonToUser(jedis.get(TGId));
                                 bot.execute(new SendMessage(AdminID, "Name of user is: " + newUser.getName() + " his TG id: " + TGId));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.equals("/clearDB")) {
@@ -252,7 +252,7 @@ public class BotController {
                                 jedis.flushAll();
                                 bot.execute(new SendMessage(AdminID, "DB was cleaned"));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.equals("/getAllUsers")) {
@@ -267,7 +267,7 @@ public class BotController {
                           //      jedis.set(AdminID, updatedAdminUser);
                           //      bot.execute(new SendMessage(AdminID, "First numbers is: " + newCheck + "."));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("createNewPost:")) {
@@ -281,7 +281,7 @@ public class BotController {
                                 }
                                 bot.execute(new SendMessage(AdminID, "The message " + postText + " has been sent."));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("D") || messageText.startsWith("d") || messageText.startsWith("В") || messageText.startsWith("в")) {
@@ -310,7 +310,7 @@ public class BotController {
                                         "If you have any questions use the /support command.").replyMarkup(replyKeyboardMarkup));
                                 setTo1TimesWasSent(tgID);
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(AdminID, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("N") || messageText.startsWith("n") || messageText.startsWith("Т") || messageText.startsWith("т")) {
@@ -325,14 +325,14 @@ public class BotController {
                     } else if (messageText.startsWith("needReply:")) {
                         String userQuestion = messageText.substring(10);
                         if (!userCanWriteToSupport(playerId)) {
-                            bot.execute(new SendMessage(playerId, "✅ I received your message and will respond to you as soon as possible. Your message: " + userQuestion).parseMode(HTML));
+                            bot.execute(new SendMessage(playerId, "✅ Our admin will reply you shortly!" + userQuestion).parseMode(HTML));
                             bot.execute(new SendMessage(AdminID, "✅ ID:<code>" + playerId + "</code> has a question" + userQuestion + " To answer it write a message: <code>reply:111111111&</code> *your text*").parseMode(HTML));
-                            System.out.println("Really works");
                         } else {
-                            bot.execute(new SendMessage(playerId, "❌ Something went wrong. The support is not available. Try once again later. ").parseMode(HTML));
+                            bot.execute(new SendMessage(playerId, "❌ There was an issue. The support is currently unavailable. Please try again later. ").parseMode(HTML));
                         }
                     } else if (messageText.equals("/help") || messageCallbackText.equals("Help")) {
-                        bot.execute(new SendMessage(playerId, "").parseMode(HTML));
+                        bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Welcome to Customer Support! If you have a question, please use the command #question: Copy the command <code>#question:</code> , " +
+                                "paste <code>#question:</code> in the chat, write your question, send the message, and wait for our admin to respond shortly. \uD83D\uDCE9").parseMode(HTML));
                     } else if (messageText.equals("/start")) {
                         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                         InlineKeyboardButton button32 = new InlineKeyboardButton("Let's start");
@@ -455,24 +455,24 @@ public class BotController {
                                     jedis.set(userKey, updatedUser);
                                     String sendAdminUID = checkedUser.getUID();
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE1 deposited. Write 'Y11111111' (telegram id) to approve and 'N1111111' to disapprove").parseMode(HTML));
-                                    bot.execute(new SendMessage(playerId, "⏳ Great your deposit will be checking soon."));
+                                    bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Great your deposit will be checking soon."));
                                 } else {
                                     if (userDate.getTime() <= currentDate.getTime()) {
                                         String sendAdminUID = checkedUser.getUID();
                                         bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE1 deposited. Write 'Y11111111' (telegram id) to approve and 'N1111111' to disapprove").parseMode(HTML));
-                                        bot.execute(new SendMessage(playerId, "⏳ Great your deposit will be checking soon."));
+                                        bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Great your deposit will be checking soon."));
                                     } else {
-                                        bot.execute(new SendMessage(playerId, "⏳ Please wait 30 minutes before next time pressing button."));
+                                        bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Please wait 30 minutes before next time pressing button."));
                                     }
                                 }
 
 
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
                         } else if (userDeposited(playerId)) {
-                            bot.execute(new SendMessage(playerId, "❌ An error occurred. Please try again. "));
+                            bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                         } else if (messageText.startsWith("/") || messageText.equals("Get Signal")) {
                             bot.execute(new SendMessage(playerId, "Before trying any signals you need to deposit"));
                         }
@@ -493,8 +493,7 @@ public class BotController {
                                     "⚠️ Be sure to register using the button 'Register' below or link from the message. Otherwise, the bot will not be able to confirm that you have joined the team. \n" +
                                     "\n" +
                                     "‼️ It's important to note that if you already have an existing Pocket Option account, it's possible to delete and create a new one, and after you can go through the personality verification process again in your new account. This process of deleting and creating a new account is authorized and permitted by Pocket Option administrators.").replyMarkup(inlineKeyboardMarkup).parseMode(HTML).disableWebPagePreview(true));
-         //                   bot.execute(new SendVideo(playerId, videoRegistrationFile));
-                            bot.execute(new SendMessage(playerId, "☝️ Here is a video guide on how to register.").parseMode(HTML));
+         //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "✅ Good job! Now send me your Pocket Option ID in format 'ID12345678'.").parseMode(HTML));
                         } else if (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11) {
@@ -514,7 +513,7 @@ public class BotController {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ An error occurred. Please send your UID again. "));
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13) {
@@ -534,7 +533,7 @@ public class BotController {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ An error occurred. Please send your UID again. "));
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
                         } else if (messageCallbackText.equals("YesIM")) {
@@ -558,7 +557,7 @@ public class BotController {
                                             "If you still have problems, then write to support with the command /support. ").replyMarkup(inlineKeyboardMarkup));
                                 }
                             } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ An error occurred. Please send your UID again. "));
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
                         } else if (messageText.startsWith("/") || messageText.equals("Get Signal")) {
