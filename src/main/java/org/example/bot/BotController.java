@@ -517,7 +517,7 @@ public class BotController {
                                 Date date = new Date();
                                 Date depositDate = DateUtil.addDays(date, -1);
                                 User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50);
-                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID  " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
+                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
@@ -537,7 +537,7 @@ public class BotController {
                                 Date date = new Date();
                                 Date depositDate = DateUtil.addDays(date, -1);
                                 User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50);
-                                bot.execute(new SendMessage(playerId, "\\uD83D\\uDCCC Is your ID  \" + uid + \" correct? ✅\\uD83C\\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
+                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
                             } catch (Exception e) {
