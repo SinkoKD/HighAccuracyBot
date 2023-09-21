@@ -1,5 +1,6 @@
 package org.example.bot;
 
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,5 +17,12 @@ public class DateUtil {
         cal.setTime(date);
         cal.add(Calendar.MINUTE, days);
         return cal.getTime();
+    }
+
+    public static boolean isWithinTradingHours(LocalTime currentTime) {
+        LocalTime tradingStart = LocalTime.of(2, 0);
+        LocalTime tradingEnd = LocalTime.of(20, 0);
+
+        return !currentTime.isBefore(tradingStart) && !currentTime.isAfter(tradingEnd);
     }
 }

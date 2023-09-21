@@ -8,20 +8,21 @@ import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendVideo;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.pengrad.telegrambot.model.request.ParseMode.HTML;
+import static org.example.bot.DateUtil.isWithinTradingHours;
 import static org.example.bot.JedisActions.*;
 
 
@@ -306,16 +307,16 @@ public class BotController {
                                 String tgID = messageText.substring(1);
                                 depositApprove(Long.parseLong(tgID));
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
-                                        new String[]{"Get Signal"});
+                                        new String[]{"/newsignal"});
                                 bot.execute(new SendMessage(AdminID, "Deposit for " + tgID + " was approved"));
                                 bot.execute(new SendMessage(tgID, "\uD83D\uDE80\uD83D\uDCCA Awesome! Everything is set up and ready to go! You can start receiving signals now. Just click on '/newsignal' or type it manually.  \n" +
-                                        "\n"  +
+                                        "\n" +
                                         "<b>❗️IMPORTANT ❗️</b> \n\n" +
                                         "<i>1⃣ I am analyzing only the real market, so I won't work on a demo properly. To achieve better accuracy, trade on a real account.\n\n" +
                                         "2⃣ I analyze all successful and failed signals. The more signals you get, the better they become.\n\n" +
                                         "3⃣ The recommended amount to use for trading is 15-20% per trade.</i>\n\n" +
                                         "Below is a video guide on how to use signals from me. \n" + "\n" +
-                                        "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").replyMarkup(replyKeyboardMarkup));
+                                        "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").parseMode(HTML).replyMarkup(replyKeyboardMarkup));
                                 setTo1TimesWasSent(tgID);
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -361,15 +362,43 @@ public class BotController {
                                 "you can reach out to our bot support using the /help command. ❗\uFE0F").parseMode(HTML));
                     } else if (userDeposited(playerId) || userDeposited(playerId)) {
                         if (messageText.equals("/newSignal") || messageCallbackText.equals("getSignal") || messageText.equals("/newsignal")) {
-                            List<String> listOfPairs = Arrays.asList(
-                                    "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
-                                    "EUR/JPY OTC", "EUR/USD OTC", "GBP/JPY OTC", "NZD/JPY OTC", "NZD/USD OTC",
-                                    "USD/CAD OTC", "USD/CNH OTC", "CHF/NOK OTC", "EUR/GBP OTC", "EUR/TRY OTC",
-                                    "CHF/JPY OTC", "EUR/NZD OTC", "AUD/JPY OTC", "AUD/USD OTC", "EUR/HUF OTC",
-                                    "USD/CHF OTC"
-//                                    "CHF/JPY","GBP/AUD","AUD/USD","EUR/GBP","GBP/CAD","GBP/JPY","EUR/AUD",
-//                                    "GBP/CHF","CAD/CHF","CAD/JPY","EUR/CHF","USD/JPY","AUD/JPY","EUR/CAD","AUD/CHF","AUD/CAD","USD/CAD","USD/CNH","EUR/JPY"
-                            );
+                            String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                            User currentUser = convertJsonToUser(jedis.get(userKey));
+                         //   LocalTime currentTime = LocalTime.now().withNano(0).withSecond(0);
+                            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+                            Instant currentInstant = Instant.now();
+                            LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
+                            List<String> listOfPairs = new ArrayList<>();
+                            int modeChoose = currentUser.getModeChoose();
+                            if (modeChoose == 1) {
+                                listOfPairs.addAll(Arrays.asList(
+                                        "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
+                                        "EUR/JPY OTC", "EUR/USD OTC", "GBP/JPY OTC", "NZD/JPY OTC", "NZD/USD OTC",
+                                        "USD/CAD OTC", "USD/CNH OTC", "CHF/NOK OTC", "EUR/GBP OTC", "EUR/TRY OTC",
+                                        "CHF/JPY OTC", "EUR/NZD OTC", "AUD/JPY OTC", "AUD/USD OTC", "EUR/HUF OTC",
+                                        "USD/CHF OTC"
+                                ));
+                            } else if (modeChoose == 2 && isWithinTradingHours(currentTime)) {
+                                listOfPairs.addAll(Arrays.asList(
+                                        "CHF/JPY", "GBP/AUD", "AUD/USD", "EUR/GBP", "GBP/CAD", "GBP/JPY", "EUR/AUD",
+                                        "GBP/CHF", "CAD/CHF", "CAD/JPY", "EUR/CHF", "USD/JPY", "AUD/JPY", "EUR/CAD",
+                                        "AUD/CHF", "AUD/CAD", "USD/CAD", "USD/CNH", "EUR/JPY"
+                                ));
+                            } else if (modeChoose == 3 && isWithinTradingHours(currentTime)) {
+                                listOfPairs.addAll(Arrays.asList(
+                                        "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
+                                        "EUR/JPY OTC", "EUR/USD OTC", "GBP/JPY OTC", "NZD/JPY OTC", "NZD/USD OTC",
+                                        "USD/CAD OTC", "USD/CNH OTC", "CHF/NOK OTC", "EUR/GBP OTC", "EUR/TRY OTC",
+                                        "CHF/JPY OTC", "EUR/NZD OTC", "AUD/JPY OTC", "AUD/USD OTC", "EUR/HUF OTC",
+                                        "USD/CHF OTC", "CHF/JPY", "GBP/AUD", "AUD/USD", "EUR/GBP", "GBP/CAD", "GBP/JPY", "EUR/AUD",
+                                        "GBP/CHF", "CAD/CHF", "CAD/JPY", "EUR/CHF", "USD/JPY", "AUD/JPY", "EUR/CAD",
+                                        "AUD/CHF", "AUD/CAD", "USD/CAD", "USD/CNH", "EUR/JPY"
+                                ));
+                            } else {
+                                bot.execute(new SendMessage(playerId, "❌ You can currently trade with your mode. Use /changemode command to change it."));
+                                return;
+                            }
+
                             Runnable signalGeneratorTask = () -> {
                                 bot.execute(new SendMessage(playerId, "\uD83D\uDFE2").parseMode(HTML));
                                 try {
@@ -389,7 +418,7 @@ public class BotController {
                                 }
                                 int randomAccuracy = random.nextInt(20) + 80;
                                 int randomAddTime = random.nextInt(10000) + 8000;
-                                   int randomTime = random.nextInt(3) + 1;
+                                int randomTime = random.nextInt(3) + 1;
                                 String pickedPair = listOfPairs.get(randomNumber);
                                 EditMessageText editMessageText = new EditMessageText(playerId, messageId + 1, "\uD83D\uDFE2\uD83D\uDFE2").parseMode(HTML);
                                 bot.execute(editMessageText);
@@ -431,11 +460,11 @@ public class BotController {
                                     e.printStackTrace();
                                 }
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
-                                        new String[]{"/newSignal"});
-                                bot.execute(new SendMessage(playerId, "<b>Start!</b>").parseMode(HTML));
+                                        new String[]{"/newsignal"});
+                                bot.execute(new SendMessage(playerId, "<b>Start!</b>").replyMarkup(replyKeyboardMarkup).parseMode(HTML));
                             };
                             new Thread(signalGeneratorTask).start();
-                        } else if (messageText.equals("/changeMode") || messageText.equals("/changemode")){
+                        } else if (messageText.equals("/changeMode") || messageText.equals("/changemode")) {
                             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                             InlineKeyboardButton button22 = new InlineKeyboardButton("OTC");
                             button22.callbackData("OTC");
@@ -445,11 +474,11 @@ public class BotController {
                             button24.callbackData("both");
                             inlineKeyboardMarkup.addRow(button22, button23, button24);
                             bot.execute(new SendMessage(playerId, "<b>Please choose your mode!</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
-                        } else if (messageCallbackText.equals("OTC")){
+                        } else if (messageCallbackText.equals("OTC")) {
                             bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'OTC' mode! Now you will get only OTC signals. To change it use /changeMode command.</b>").parseMode(HTML));
-                        } else if (messageCallbackText.equals("noneOTC")){
+                        } else if (messageCallbackText.equals("noneOTC")) {
                             bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'None OTC' mode! Now you will get only none OTC signals. To change it use /changeMode command.</b>").parseMode(HTML));
-                        } else if (messageCallbackText.equals("both")){
+                        } else if (messageCallbackText.equals("both")) {
                             bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'Both' mode! Now you will get all available signals. To change it use /changeMode command.</b>").parseMode(HTML));
                         }
                     } else if (userRegistered(playerId)) {
@@ -501,10 +530,10 @@ public class BotController {
                                     "\uD83E\uDD16\uD83D\uDD17 Make sure to register using the button below or the link in the message. Otherwise, we won't be able to verify that you've joined the team.  \n" +
                                     "\n" +
                                     "‼️ Please keep in mind that if you already have an existing Pocket Option account, you can delete it and create a new one. Afterward, you can go through the personality verification process again in your new account. This procedure of deleting and creating a new account is authorized and allowed by Pocket Option administrators. \uD83D\uDD04\uD83D\uDCCB").replyMarkup(inlineKeyboardMarkup).parseMode(HTML).disableWebPagePreview(true));
-         //
+                            //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
-                        }  else if (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11) {
+                        } else if (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
@@ -549,7 +578,7 @@ public class BotController {
                             try {
                                 User user = convertJsonToUser(jedis.get(userKey));
                                 String sendAdminUID = user.getUID();
-                                User adminUser= convertJsonToUser(jedis.get(AdminID));
+                                User adminUser = convertJsonToUser(jedis.get(AdminID));
                                 if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt("60")) {
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE2 want to register. Write 'A11111111' (telegram id) to approve and 'D1111111' to disapprove").parseMode(HTML));
                                     bot.execute(new SendMessage(playerId, "\uD83C\uDF89\uD83D\uDC4D Awesome! Your ID will be checked shortly."));
