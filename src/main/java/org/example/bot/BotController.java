@@ -562,7 +562,7 @@ public class BotController {
                             //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
-                        } else if ( !messageText.startsWith("/") && (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") )&& messageText.length() == 10 || messageText.length() == 11) {
+                        } else if ( !messageText.startsWith("/") && !messageText.equals("/changemode") && (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") )&& messageText.length() == 10 || messageText.length() == 11) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
