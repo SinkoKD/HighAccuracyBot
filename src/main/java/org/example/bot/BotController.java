@@ -582,7 +582,7 @@ public class BotController {
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
-                        } else if (messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13) {
+                        } else if (!messageText.startsWith("/") && !messageText.equals("/changemode") && messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
