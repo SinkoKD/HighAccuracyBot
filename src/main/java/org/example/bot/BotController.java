@@ -475,11 +475,43 @@ public class BotController {
                             inlineKeyboardMarkup.addRow(button22, button23, button24);
                             bot.execute(new SendMessage(playerId, "<b>Please choose your mode!</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                         } else if (messageCallbackText.equals("OTC")) {
-                            bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'OTC' mode! Now you will get only OTC signals. To change it use /changeMode command.</b>").parseMode(HTML));
+                            try {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                currentUser.setModeChoose(1);
+                                jedis.set(userKey, convertUserToJson(currentUser));
+                                bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'OTC' mode! Now you will get only OTC signals. " +
+                                        "To change it use /changemode command.</b>").parseMode(HTML));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+
                         } else if (messageCallbackText.equals("noneOTC")) {
-                            bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'None OTC' mode! Now you will get only none OTC signals. To change it use /changeMode command.</b>").parseMode(HTML));
+                            try {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                currentUser.setModeChoose(2);
+                                jedis.set(userKey, convertUserToJson(currentUser));
+                                bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'None OTC' mode! Now you will get " +
+                                        "only none OTC signals. To change it use /changemode command.</b>").parseMode(HTML));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
                         } else if (messageCallbackText.equals("both")) {
-                            bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'Both' mode! Now you will get all available signals. To change it use /changeMode command.</b>").parseMode(HTML));
+                            try {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                currentUser.setModeChoose(3);
+                                jedis.set(userKey, convertUserToJson(currentUser));
+                                bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You successfully picked 'Both' mode! Now you will get all available signals. " +
+                                        "To change it use /changemode command.</b>").parseMode(HTML));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+
                         }
                     } else if (userRegistered(playerId)) {
                         if (messageCallbackText.equals("IDeposit")) {
