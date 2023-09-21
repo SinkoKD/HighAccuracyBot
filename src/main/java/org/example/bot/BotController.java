@@ -267,7 +267,7 @@ public class BotController {
                                 User adminUser = convertJsonToUser(jedis.get(USER_DB_MAP_KEY + ":" +AdminID));
                                 adminUser.setUID(String.valueOf(newCheck));
                                 String updatedAdminUser = convertUserToJson(adminUser);
-                                jedis.set( USER_DB_MAP_KEY + ":" + AdminID + AdminID, updatedAdminUser);
+                                jedis.set( USER_DB_MAP_KEY + ":" + AdminID, updatedAdminUser);
                                 bot.execute(new SendMessage(AdminID, "First numbers is: " + newCheck + "."));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
