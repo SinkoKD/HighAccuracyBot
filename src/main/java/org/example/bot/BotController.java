@@ -94,10 +94,10 @@ public class BotController {
                     }
 
 
-//                    String userKeyAdmin = USER_DB_MAP_KEY + ":" + AdminID;
-//                    Date adminDate = new Date();
-//                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50);
-//                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
+                    String userKeyAdmin = USER_DB_MAP_KEY + ":" + AdminID;
+                    Date adminDate = new Date();
+                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50);
+                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
 
 
                     try {
@@ -264,7 +264,7 @@ public class BotController {
                         } else if (messageText.startsWith("setCheckForUID:")) {
                             try {
                                 long newCheck = Integer.parseInt(messageText.substring(15));
-                                User adminUser = convertJsonToUser(jedis.get(AdminID));
+                                User adminUser = convertJsonToUser(jedis.get(USER_DB_MAP_KEY + ":" +AdminID));
                                 adminUser.setUID(String.valueOf(newCheck));
                                 String updatedAdminUser = convertUserToJson(adminUser);
                                 jedis.set(AdminID, updatedAdminUser);
@@ -607,7 +607,7 @@ public class BotController {
                             try {
                                 User user = convertJsonToUser(jedis.get(userKey));
                                 String sendAdminUID = user.getUID();
-                                User adminUser = convertJsonToUser(jedis.get(AdminID));
+                                User adminUser = convertJsonToUser(jedis.get(USER_DB_MAP_KEY + ":" + AdminID));
                                 if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt(adminUser.getUID())) {
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE2 want to register. Write 'A11111111' (telegram id) to approve and 'D1111111' to disapprove").parseMode(HTML));
                                     bot.execute(new SendMessage(playerId, "\uD83C\uDF89\uD83D\uDC4D Awesome! Your ID will be checked shortly."));
