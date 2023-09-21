@@ -142,12 +142,12 @@ public class BotController {
                                             increaseTimesWasSent(keyForUser);
                                         } else if (!currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 1) {
                                             bot.execute(new SendMessage(userTgID, "\uD83D\uDCCA\uD83D\uDD17 I'd like to remind you that for registration, you should create a new account " +
-                                                    "using this link: [https://bit.ly/ChatGPTtrading](https://bit.ly/ChatGPTtrading). It'll only take a couple of minutes, " +
+                                                    "using this link: [bit.ly/HighAccuracyBot](bit.ly/HighAccuracyBot). It'll only take a couple of minutes, " +
                                                     "and I'm ready to receive your signals once it's done. Let's proceed! ").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (!currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 2) {
                                             bot.execute(new SendMessage(userTgID, "⏳\uD83D\uDCCA\uD83D\uDD17 I want to emphasize that signing up is a quick process! Simply create a new " +
-                                                    "account using this link: [https://bit.ly/ChatGPTtrading](https://bit.ly/ChatGPTtrading). (This is the final reminder, " +
+                                                    "account using this link: [bit.ly/HighAccuracyBot](bit.ly/HighAccuracyBot). (This is the final reminder, " +
                                                     "if you don't manage to create an account within the next 3 days, you won't get access to my signals) ").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         }
@@ -294,7 +294,7 @@ public class BotController {
                             String tgID = messageText.substring(1);
                             InlineKeyboardButton button12 = new InlineKeyboardButton("Register here");
                             InlineKeyboardButton button13 = new InlineKeyboardButton("Registered");
-                            button12.url("https://bit.ly/ChatGPTtrading");
+                            button12.url("bit.ly/HighAccuracyBot");
                             button13.callbackData("ImRegistered");
                             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                             inlineKeyboardMarkup.addRow(button12, button13);
@@ -416,7 +416,7 @@ public class BotController {
                                 } else {
                                     direction = "\uD83D\uDD34⬇\uFE0F Signal: <b>DOWN</b> ";
                                 }
-                                int randomAccuracy = random.nextInt(20) + 80;
+                                int randomAccuracy = random.nextInt(20) + 68;
                                 int randomAddTime = random.nextInt(10000) + 8000;
                                 int randomTime = random.nextInt(3) + 1;
                                 String pickedPair = listOfPairs.get(randomNumber);
@@ -551,11 +551,11 @@ public class BotController {
                         if (messageText.equals("/register") || messageCallbackText.equals("RegisterMe")) {
                             InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                             InlineKeyboardButton button2 = new InlineKeyboardButton("Click me and send UID below!");
-                            button2.url("https://bit.ly/ChatGPTtrading");
+                            button2.url("bit.ly/HighAccuracyBot");
                             inlineKeyboardMarkup.addRow(button2);
                             bot.execute(new SendMessage(playerId, "\uD83D\uDE80\uD83D\uDCC8  Well done! To begin, you should create a fresh account on the Pocket Option platform using the button below. \n" +
                                     "\n" +
-                                    " \uD83D\uDD17 bit.ly/ChatGPTtrading \n" +
+                                    " \uD83D\uDD17 bit.ly/HighAccuracyBot \n" +
                                     "\n" +
                                     "\uD83D\uDCD7 After registering, send me your ID in format <i>ID12345678</i>\n" +
                                     "\n" +
@@ -617,7 +617,7 @@ public class BotController {
                                 } else {
                                     InlineKeyboardButton button12 = new InlineKeyboardButton("Register here");
                                     InlineKeyboardButton button13 = new InlineKeyboardButton("Registered!");
-                                    button12.url("https://bit.ly/ChatGPTtrading");
+                                    button12.url("bit.ly/HighAccuracyBot");
                                     button13.callbackData("ImRegistered");
                                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                     inlineKeyboardMarkup.addRow(button12, button13);
