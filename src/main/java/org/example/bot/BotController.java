@@ -611,7 +611,7 @@ public class BotController {
                                 User user = convertJsonToUser(jedis.get(userKey));
                                 String sendAdminUID = user.getUID();
                                 User adminUser = convertJsonToUser(jedis.get(AdminID));
-                                if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt("60")) {
+                                if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt(adminUser.getUID())) {
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE2 want to register. Write 'A11111111' (telegram id) to approve and 'D1111111' to disapprove").parseMode(HTML));
                                     bot.execute(new SendMessage(playerId, "\uD83C\uDF89\uD83D\uDC4D Awesome! Your ID will be checked shortly."));
                                 } else {
