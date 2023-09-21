@@ -365,17 +365,15 @@ public class BotController {
                             TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
                             Instant currentInstant = Instant.now();
                             LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
-                            List<String> listOfPairs = new ArrayList<>();
+                            List<String> listOfPairs = Arrays.asList(
+                                    "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
+                                    "EUR/JPY OTC", "EUR/USD OTC", "GBP/JPY OTC", "NZD/JPY OTC", "NZD/USD OTC",
+                                    "USD/CAD OTC", "USD/CNH OTC", "CHF/NOK OTC", "EUR/GBP OTC", "EUR/TRY OTC",
+                                    "CHF/JPY OTC", "EUR/NZD OTC", "AUD/JPY OTC", "AUD/USD OTC", "EUR/HUF OTC",
+                                    "USD/CHF OTC"
+                            );
                             int modeChoose = currentUser.getModeChoose();
-                            if (modeChoose == 1) {
-                                listOfPairs.addAll(Arrays.asList(
-                                        "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
-                                        "EUR/JPY OTC", "EUR/USD OTC", "GBP/JPY OTC", "NZD/JPY OTC", "NZD/USD OTC",
-                                        "USD/CAD OTC", "USD/CNH OTC", "CHF/NOK OTC", "EUR/GBP OTC", "EUR/TRY OTC",
-                                        "CHF/JPY OTC", "EUR/NZD OTC", "AUD/JPY OTC", "AUD/USD OTC", "EUR/HUF OTC",
-                                        "USD/CHF OTC"
-                                ));
-                            } else if (modeChoose == 2 && isWithinTradingHours(currentTime)) {
+                            if (modeChoose == 2 && isWithinTradingHours(currentTime)) {
                                 listOfPairs.addAll(Arrays.asList(
                                         "CHF/JPY", "GBP/AUD", "AUD/USD", "EUR/GBP", "GBP/CAD", "GBP/JPY", "EUR/AUD",
                                         "GBP/CHF", "CAD/CHF", "CAD/JPY", "EUR/CHF", "USD/JPY", "AUD/JPY", "EUR/CAD",
@@ -471,6 +469,7 @@ public class BotController {
                             button24.callbackData("both");
                             inlineKeyboardMarkup.addRow(button22, button23, button24);
                             bot.execute(new SendMessage(playerId, "<b>Please choose your mode!</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                            return;
                         } else if (messageCallbackText.equals("OTC")) {
                             try {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
@@ -562,7 +561,7 @@ public class BotController {
                             //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
-                        } else if ( !messageText.startsWith("/") && !messageText.equals("/changemode") && (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") )&& messageText.length() == 10 || messageText.length() == 11) {
+                        } else if ( !messageText.startsWith("/") && !messageText.equals("/changemode") && (messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11)) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
@@ -582,7 +581,7 @@ public class BotController {
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
                                 e.printStackTrace();
                             }
-                        } else if (!messageText.startsWith("/") && !messageText.equals("/changemode") && messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13) {
+                        } else if ((!messageText.startsWith("/") && !messageText.equals("/changemode")) && (messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13)) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
