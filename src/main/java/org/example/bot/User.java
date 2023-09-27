@@ -16,11 +16,14 @@ public class User implements Serializable {
     private boolean canPressRegister;
     private Integer modeChoose;
     private Integer minSignalAccuracy;
+    private Integer tariffUsed;
+    private Integer messagesAfterDeposit;
 
-    public User(String name, String UID, boolean registered, boolean deposited,
-                Date lastTimeTexted, Date lastTimePressedDeposit,
+    public User(String name, String UID, boolean registered,
+                boolean deposited, Date lastTimeTexted, Date lastTimePressedDeposit,
                 int timesTextWasSent, boolean canWriteToSupport, boolean canPressDeposit,
-                boolean canPressRegister, Integer modeChoose, Integer minSignalAccuracy) {
+                boolean canPressRegister, Integer modeChoose, Integer minSignalAccuracy,
+                Integer tariffUsed, Integer messagesAfterDeposit) {
         this.name = name;
         this.UID = UID;
         this.registered = registered;
@@ -33,6 +36,24 @@ public class User implements Serializable {
         this.canPressRegister = canPressRegister;
         this.modeChoose = modeChoose;
         this.minSignalAccuracy = minSignalAccuracy;
+        this.tariffUsed = tariffUsed;
+        this.messagesAfterDeposit = messagesAfterDeposit;
+    }
+
+    public Integer getTariffUsed() {
+        return tariffUsed;
+    }
+
+    public void setTariffUsed(Integer tariffUsed) {
+        this.tariffUsed = tariffUsed;
+    }
+
+    public Integer getMessagesAfterDeposit() {
+        return messagesAfterDeposit;
+    }
+
+    public void setMessagesAfterDeposit(Integer messagesAfterDeposit) {
+        this.messagesAfterDeposit = messagesAfterDeposit;
     }
 
     public boolean isCanWriteToSupport() {
