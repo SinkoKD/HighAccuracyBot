@@ -208,6 +208,45 @@ public class BotController {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
+                        } else if (messageText.startsWith("giveAdvanced:")) {
+                            try {
+                                String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(13));
+                                User userUpdated = convertJsonToUser(jedis.get(TGId));
+                                userUpdated.setModeChoose(1);
+                                String updatedUser = convertUserToJson(userUpdated);
+                                jedis.set(TGId, updatedUser);
+                                bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has advanced plan!"));
+                                bot.execute(new SendMessage(messageText.substring(13), "Plan 'Advanced' has been activated!"));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageText.startsWith("givePro:")) {
+                            try {
+                                String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(8));
+                                User userUpdated = convertJsonToUser(jedis.get(TGId));
+                                userUpdated.setModeChoose(2);
+                                String updatedUser = convertUserToJson(userUpdated);
+                                jedis.set(TGId, updatedUser);
+                                bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has pro plan!"));
+                                bot.execute(new SendMessage(messageText.substring(8), "Plan 'Pro' has been activated!"));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageText.startsWith("giveBasic:")) {
+                            try {
+                                String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(10));
+                                User userUpdated = convertJsonToUser(jedis.get(TGId));
+                                userUpdated.setModeChoose(0);
+                                String updatedUser = convertUserToJson(userUpdated);
+                                jedis.set(TGId, updatedUser);
+                                bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has basic plan!"));
+                                bot.execute(new SendMessage(messageText.substring(10), "Plan 'Basic' has been activated!"));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
                         } else if (messageText.startsWith("banDeposit30:")) {
                             try {
                                 String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(13));
@@ -315,6 +354,26 @@ public class BotController {
                                         "Below is a video guide on how to use signals from me. \n" + "\n" +
                                         "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").parseMode(HTML).replyMarkup(replyKeyboardMarkup));
                                 setTo1TimesWasSent(tgID);
+                                try {
+                                    Thread.sleep(10000);
+                                } catch (InterruptedException e) {
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                    e.printStackTrace();
+                                }
+                                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                InlineKeyboardButton button22 = new InlineKeyboardButton("Basic - 0$");
+                                button22.callbackData("Basic");
+                                InlineKeyboardButton button23 = new InlineKeyboardButton("Advanced - 35$");
+                                button23.callbackData("Advanced");
+                                InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
+                                button24.callbackData("Pro");
+                                inlineKeyboardMarkup.addRow(button22, button23, button24);
+//                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
+//                                        "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
+//                                        "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+//                                        "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
+//                                        "<i>Please choose the plan that suits you best! </i> \n\n You can always change the plan via /upgrade command. \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -367,6 +426,8 @@ public class BotController {
                             LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
                             List<String> listOfPairs = new ArrayList<>();
                             int modeChoose = currentUser.getModeChoose();
+                            int planChoose = currentUser.getTariffUsed();
+                            int messagesAfterDeposit = currentUser.getMessagesAfterDeposit();
                             if (modeChoose == 1) {
                                 listOfPairs.addAll(Arrays.asList(
                                         "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
@@ -392,7 +453,7 @@ public class BotController {
                                         "AUD/CHF", "AUD/CAD", "USD/CAD", "USD/CNH", "EUR/JPY"
                                 ));
                             } else {
-                                bot.execute(new SendMessage(playerId, "❌ You can currently trade with your mode. Use /changemode command to change it."));
+                                bot.execute(new SendMessage(playerId, "❌ You can't currently trade with your mode. Use /changemode command to change it."));
                                 return;
                             }
 
@@ -407,15 +468,33 @@ public class BotController {
                                 Random random = new Random();
                                 int randomNumber = random.nextInt(listOfPairs.size());
                                 int randomUp = random.nextInt(2);
-                                String direction = "";
+                                String direction;
                                 if (randomUp == 0) {
                                     direction = "\uD83D\uDFE2⬆\uFE0F Signal: <b>UP</b> ";
                                 } else {
                                     direction = "\uD83D\uDD34⬇\uFE0F Signal: <b>DOWN</b> ";
                                 }
-                                int randomAccuracy = random.nextInt(20) + 68;
                                 int randomAddTime = random.nextInt(10000) + 8000;
                                 int randomTime = random.nextInt(3) + 1;
+                                int randomAccuracy = 50;
+                                if (planChoose == 0) {
+                                    randomAccuracy = random.nextInt(44) + 50;
+                                    if (randomAccuracy >= 80 ) {
+                                        randomAccuracy = random.nextInt(44) + 50;
+                                    }
+                                    if (randomAccuracy >= 80 ) {
+                                        randomAccuracy = random.nextInt(44) + 50;
+                                    }
+                                    if (randomAccuracy >= 80 ) {
+                                        randomAccuracy = random.nextInt(44) + 50;
+                                    }
+                                } else if (planChoose == 1) {
+                                    randomAccuracy = random.nextInt(19) + 80;
+                                } else if (planChoose == 2) {
+                                    randomAccuracy = random.nextInt(5) + 95;
+                                }
+
+
                                 String pickedPair = listOfPairs.get(randomNumber);
                                 EditMessageText editMessageText = new EditMessageText(playerId, messageId + 1, "\uD83D\uDFE2\uD83D\uDFE2").parseMode(HTML);
                                 bot.execute(editMessageText);
@@ -459,6 +538,29 @@ public class BotController {
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
                                         new String[]{"/newsignal"});
                                 bot.execute(new SendMessage(playerId, "<b>Start!</b>").replyMarkup(replyKeyboardMarkup).parseMode(HTML));
+//                                if (planChoose == 0){
+//                                    if (messagesAfterDeposit < 5){
+//                                        currentUser.setMessagesAfterDeposit(messagesAfterDeposit + 1);
+//                                        jedis.set(userKey, convertUserToJson(currentUser));
+//                                    } else if (messagesAfterDeposit == 5 ) {
+//                                        InlineKeyboardMarkup inlineKeyboardMark = new InlineKeyboardMarkup();
+//                                        InlineKeyboardButton button2 = new InlineKeyboardButton("Basic - 0$");
+//                                        button2.callbackData("Basic");
+//                                        InlineKeyboardButton button3 = new InlineKeyboardButton("Advanced - 35$");
+//                                        button3.callbackData("Advanced");
+//                                        InlineKeyboardButton button4 = new InlineKeyboardButton("Pro - 60$");
+//                                        button4.callbackData("Pro");
+//                                        inlineKeyboardMark.addRow(button2, button3, button4);
+//                                        bot.execute(new SendMessage(playerId, "<b>\uD83D\uDE0A I want to remind you that you " +
+//                                                "can improve the accuracy of signals!" +
+//                                                " To do that, you just need to change your plan. Simply click on the plan that " +
+//                                                "suits you best from the options below.\uD83D\uDCC8. You also can do it via /upgrade command.\n\n</b>" +
+//                                                "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
+//                                                "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+//                                                "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n")
+//                                                .replyMarkup(replyKeyboardMarkup).parseMode(HTML).replyMarkup(inlineKeyboardMark));
+//                                    }
+//                                }
                             };
                             new Thread(signalGeneratorTask).start();
                         } else if (messageText.equals("/changeMode") || messageText.equals("/changemode")) {
@@ -471,7 +573,20 @@ public class BotController {
                             button24.callbackData("both");
                             inlineKeyboardMarkup.addRow(button22, button23, button24);
                             bot.execute(new SendMessage(playerId, "<b>Please choose your mode!</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
-                            return;
+                        } else if (messageText.equals("/upgrade")) {
+                            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                            InlineKeyboardButton button22 = new InlineKeyboardButton("Basic - 0$");
+                            button22.callbackData("Basic");
+                            InlineKeyboardButton button23 = new InlineKeyboardButton("Advanced - 35$");
+                            button23.callbackData("Advanced");
+                            InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
+                            button24.callbackData("Pro");
+                            inlineKeyboardMarkup.addRow(button22, button23, button24);
+                            bot.execute(new SendMessage(playerId, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
+                                    "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
+                                    "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+                                    "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
+                                    "<i>Please choose the plan that suits you best! </i> \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                         } else if (messageCallbackText.equals("OTC")) {
                             try {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
@@ -510,7 +625,83 @@ public class BotController {
                                 e.printStackTrace();
                             }
 
+                        } else if (messageCallbackText.equals("Basic")) {
+                            try {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                if (currentUser.getTariffUsed() != 0) {
+                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You shouldn't pick lower plan.</b>").parseMode(HTML));
+                                } else {
+                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Great choice! Your \"Basic\" plan is now activated. Remember, you can always upgrade it using the /upgrade command.</b>").parseMode(HTML));
+                                }
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageCallbackText.equals("Advanced")) {
+                            try {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                if (currentUser.getTariffUsed() != 1) {
+                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You shouldn't pick lower plan.</b>").parseMode(HTML));
+                                } else {
+                                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                    InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
+                                    button22.callbackData("Next");
+                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Advanced\" plan. " +
+                                            "Now, to obtain it, please pay $35 using your preferred payment method below.\n\n <i>Important! Please consider any transaction fees," +
+                                            " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
+                                            "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                                }
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageCallbackText.equals("Pro")) {
+                            try {
+
+                                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                    InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
+                                    button22.callbackData("Next");
+                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
+                                            "Now, to obtain it, please pay $60 using your preferred payment method below.\n\n <i>Important! Please consider any transaction fees," +
+                                            " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
+                                            "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageCallbackText.equals("Pro")) {
+                            try {
+                                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
+                                button22.callbackData("Next");
+                                bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
+                                        "Now, to obtain it, please pay $60 using your preferred payment method below.\n\n <b>BTC</b>\n<code>bc1qfw4n83tjzq0nu4z2e8nutrgj34hw4flfmm4yrw" +
+                                        "</code>\n\n<b>USDT ERC20</b>\n<code>0x02e4eEC69E5b31048bab05a133b85B7996baEf42</code>\n\n <i>Important! Please consider any transaction fees," +
+                                        " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
+                                        "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+                        } else if (messageCallbackText.equals("Next")) {
+                            try {
+                                bot.execute(new SendMessage(playerId, "\uD83D\uDE0A Now, please follow the instructions carefully!\n" +
+                                        "\n" +
+                                        "1. Take a screenshot confirming your payment. It should show the amount and transaction number.\n" +
+                                        "\n" +
+                                        "2. Send this screenshot along with your ID <code>" + playerId + "</code> for verification to our admins @kayneadmin. " +
+                                        "<i>It's important to send ONLY the screenshot and ID. They won't respond to other questions.</i>\uD83D\uDCBC\n" +
+                                        "\n" +
+                                        "Wait for confirmation that the plan is activated, and start earning! \uD83D\uDC4D").parseMode(HTML));
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
                         }
+
+
                     } else if (userRegistered(playerId)) {
                         if (messageCallbackText.equals("IDeposit")) {
                             try {
