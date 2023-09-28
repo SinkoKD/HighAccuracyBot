@@ -583,7 +583,9 @@ public class BotController {
                             button23.callbackData("Advanced");
                             InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
                             button24.callbackData("Pro");
-                            inlineKeyboardMarkup.addRow(button22, button23, button24);
+                            inlineKeyboardMarkup.addRow(button22);
+                            inlineKeyboardMarkup.addRow(button23);
+                            inlineKeyboardMarkup.addRow(button24);
                             bot.execute(new SendMessage(playerId, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
                                     "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
                                     "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
