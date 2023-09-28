@@ -651,7 +651,7 @@ public class BotController {
                             try {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 User currentUser = convertJsonToUser(jedis.get(userKey));
-                                if (currentUser.getTariffUsed() != 1) {
+                                if (currentUser.getTariffUsed() == 2) {
                                     bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 You shouldn't pick lower plan.</b>").parseMode(HTML));
                                 } else {
                                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
