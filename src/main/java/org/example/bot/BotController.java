@@ -213,6 +213,7 @@ public class BotController {
                                 String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(13));
                                 User userUpdated = convertJsonToUser(jedis.get(TGId));
                                 userUpdated.setModeChoose(1);
+                                userUpdated.setMessagesAfterDeposit(10);
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has advanced plan!"));
@@ -226,6 +227,7 @@ public class BotController {
                                 String TGId = USER_DB_MAP_KEY + ":" + (messageText.substring(8));
                                 User userUpdated = convertJsonToUser(jedis.get(TGId));
                                 userUpdated.setModeChoose(2);
+                                userUpdated.setMessagesAfterDeposit(10);
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has pro plan!"));
