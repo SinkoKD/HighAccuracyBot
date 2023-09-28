@@ -216,7 +216,7 @@ public class BotController {
                                 userUpdated.setMessagesAfterDeposit(10);
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
-                                bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has advanced plan!"));
+                                bot.execute(new SendMessage(AdminID, "User with ID " + messageText.substring(13) + " now has advanced plan!"));
                                 bot.execute(new SendMessage(messageText.substring(13), "Plan 'Advanced' has been activated!"));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -230,7 +230,7 @@ public class BotController {
                                 userUpdated.setMessagesAfterDeposit(10);
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
-                                bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has pro plan!"));
+                                bot.execute(new SendMessage(AdminID, "User with ID " + messageText.substring(8) + " now has pro plan!"));
                                 bot.execute(new SendMessage(messageText.substring(8), "Plan 'Pro' has been activated!"));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -430,6 +430,8 @@ public class BotController {
                             int modeChoose = currentUser.getModeChoose();
                             int planChoose = currentUser.getTariffUsed();
                             int messagesAfterDeposit = currentUser.getMessagesAfterDeposit();
+                            System.out.println(planChoose);
+                            System.out.println(messagesAfterDeposit);
                             if (modeChoose == 1) {
                                 listOfPairs.addAll(Arrays.asList(
                                         "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
