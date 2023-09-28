@@ -637,6 +637,11 @@ public class BotController {
                                     bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Great choice! Your \"Basic\" plan is now activated. Remember, you can always upgrade it using the /upgrade command.</b>").parseMode(HTML));
                                 }
                             } catch (Exception e) {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                currentUser.setTariffUsed(0);
+                                currentUser.setMessagesAfterDeposit(0);
+                                jedis.set(userKey, convertUserToJson(currentUser));
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
@@ -650,12 +655,18 @@ public class BotController {
                                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                     InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
                                     button22.callbackData("Next");
+                                    inlineKeyboardMarkup.addRow(button22);
                                     bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Advanced\" plan. " +
                                             "Now, to obtain it, please pay $35 using your preferred payment method below.\n\n <i>Important! Please consider any transaction fees," +
                                             " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
                                             "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                                 }
                             } catch (Exception e) {
+                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                User currentUser = convertJsonToUser(jedis.get(userKey));
+                                currentUser.setTariffUsed(0);
+                                currentUser.setMessagesAfterDeposit(0);
+                                jedis.set(userKey, convertUserToJson(currentUser));
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
                             }
@@ -665,7 +676,8 @@ public class BotController {
                                     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                     InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
                                     button22.callbackData("Next");
-                                    bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
+                                inlineKeyboardMarkup.addRow(button22);
+                                bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
                                             "Now, to obtain it, please pay $60 using your preferred payment method below.\n\n <i>Important! Please consider any transaction fees," +
                                             " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
                                             "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
