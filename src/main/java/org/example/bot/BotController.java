@@ -356,8 +356,9 @@ public class BotController {
                                         "Below is a video guide on how to use signals from me. \n" + "\n" +
                                         "If you're still facing issues, please contact support by using the command /help. They'll be able to assist you further.").parseMode(HTML).replyMarkup(replyKeyboardMarkup));
                                 setTo1TimesWasSent(tgID);
+                                depositApprove(Long.parseLong(tgID));
                                 try {
-                                    Thread.sleep(10000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                     e.printStackTrace();
@@ -369,7 +370,9 @@ public class BotController {
                                 button23.callbackData("Advanced");
                                 InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
                                 button24.callbackData("Pro");
-                                inlineKeyboardMarkup.addRow(button22, button23, button24);
+                                inlineKeyboardMarkup.addRow(button22);
+                                inlineKeyboardMarkup.addRow(button23);
+                                inlineKeyboardMarkup.addRow(button24);
 //                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
 //                                        "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
 //                                        "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
