@@ -89,7 +89,7 @@ public class BotController {
                             String updatedUser = convertUserToJson(checkedUser);
                             jedis.set(userKey, updatedUser);
                         } catch (Exception e) {
-                            System.out.println("People side");
+                            System.out.println("People side" + playerName);
                             e.printStackTrace();
                         }
                     } else {
