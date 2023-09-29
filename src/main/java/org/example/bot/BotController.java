@@ -167,6 +167,7 @@ public class BotController {
                                 String tgID = messageText.substring(1);
                                 System.out.println(tgID);
                                 registrationApprove(Long.parseLong(tgID));
+                                registrationApprove(Long.parseLong(tgID));
                                 bot.execute(new SendMessage(tgID, "✅ Fantastic, your account is confirmed! T" +
                                         "he final step is to make a deposit of at least $50 using any convenient method. " +
                                         "After that, click the 'Deposit done' button. \uD83D\uDCB0\uD83D\uDC4D\n" + "\n" +
@@ -343,6 +344,7 @@ public class BotController {
                         } else if (messageText.startsWith("Y") || messageText.startsWith("y") || messageText.startsWith("Н") || messageText.startsWith("н")) {
                             try {
                                 String tgID = messageText.substring(1);
+                                depositApprove(Long.parseLong(tgID));
                                 depositApprove(Long.parseLong(tgID));
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
                                         new String[]{"/newsignal"});

@@ -56,6 +56,7 @@ public class JedisActions {
             checkedUser.setRegistered(true);
             String updatedUser = convertUserToJson(checkedUser);
             jedis.set(userKey, updatedUser);
+            System.out.println("Register ready");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,6 +69,7 @@ public class JedisActions {
             checkedUser.setDeposited(true);
             String updatedUser = convertUserToJson(checkedUser);
             jedis.set(userKey, updatedUser);
+            System.out.println("Deposit ready");
         } catch (Exception e) {
             e.printStackTrace();
         }
