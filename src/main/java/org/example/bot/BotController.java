@@ -217,7 +217,7 @@ public class BotController {
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + messageText.substring(13) + " now has advanced plan!"));
-                                bot.execute(new SendMessage(messageText.substring(13), "Plan 'Advanced' has been activated!"));
+                                bot.execute(new SendMessage(messageText.substring(13), "✅ Plan 'Advanced' has been activated!"));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -231,7 +231,7 @@ public class BotController {
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + messageText.substring(8) + " now has pro plan!"));
-                                bot.execute(new SendMessage(messageText.substring(8), "Plan 'Pro' has been activated!"));
+                                bot.execute(new SendMessage(messageText.substring(8), "✅ Plan 'Pro' has been activated!"));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -244,7 +244,7 @@ public class BotController {
                                 String updatedUser = convertUserToJson(userUpdated);
                                 jedis.set(TGId, updatedUser);
                                 bot.execute(new SendMessage(AdminID, "User with ID " + TGId + " now has basic plan!"));
-                                bot.execute(new SendMessage(messageText.substring(10), "Plan 'Basic' has been activated!"));
+                                bot.execute(new SendMessage(messageText.substring(10), "✅ Plan 'Basic' has been activated!"));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -372,7 +372,7 @@ public class BotController {
                                 inlineKeyboardMarkup.addRow(button22, button23, button24);
 //                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
 //                                        "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
-//                                        "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+//                                        "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
 //                                        "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
 //                                        "<i>Please choose the plan that suits you best! </i> \n\n You can always change the plan via /upgrade command. \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
 
@@ -494,6 +494,9 @@ public class BotController {
                                     }
                                 } else if (planChoose == 1) {
                                     randomAccuracy = random.nextInt(19) + 80;
+                                    if (randomAccuracy >= 90 ) {
+                                        randomAccuracy = random.nextInt(19) + 80;
+                                    }
                                 } else if (planChoose == 2) {
                                     randomAccuracy = random.nextInt(5) + 95;
                                 }
@@ -560,7 +563,7 @@ public class BotController {
 //                                                " To do that, you just need to change your plan. Simply click on the plan that " +
 //                                                "suits you best from the options below.\uD83D\uDCC8. You also can do it via /upgrade command.\n\n</b>" +
 //                                                "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
-//                                                "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+//                                                "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
 //                                                "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n")
 //                                                .replyMarkup(replyKeyboardMarkup).parseMode(HTML).replyMarkup(inlineKeyboardMark));
 //                                    }
@@ -590,7 +593,7 @@ public class BotController {
                             inlineKeyboardMarkup.addRow(button24);
                             bot.execute(new SendMessage(playerId, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
                                     "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
-                                    "Advanced - Signals with accuracy over 85% - Price: $35 \uD83D\uDE80\n" +
+                                    "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
                                     "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
                                     "<i>Please choose the plan that suits you best! </i> \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                         } else if (messageCallbackText.equals("OTC")) {
