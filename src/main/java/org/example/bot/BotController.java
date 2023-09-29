@@ -432,11 +432,17 @@ public class BotController {
                             Instant currentInstant = Instant.now();
                             LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
                             List<String> listOfPairs = new ArrayList<>();
-                            int modeChoose = currentUser.getModeChoose();
-                            int planChoose = currentUser.getTariffUsed();
-                            int messagesAfterDeposit = currentUser.getMessagesAfterDeposit();
-                            System.out.println(planChoose);
-                            System.out.println(messagesAfterDeposit);
+                            int modeChoose = 1;
+                            try {
+                                 modeChoose = currentUser.getModeChoose();
+                            } catch (Exception e) {
+                                currentUser.setTariffUsed(0);
+                                currentUser.setMessagesAfterDeposit(0);
+                                jedis.set(userKey, convertUserToJson(currentUser));
+                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
+                                e.printStackTrace();
+                            }
+
                             if (modeChoose == 1) {
                                 listOfPairs.addAll(Arrays.asList(
                                         "AUD/CAD OTC", "AUD/CHF OTC", "AUD/NZD OTC", "CAD/CHF OTC", "EUR/CHF OTC",
@@ -467,6 +473,18 @@ public class BotController {
                             }
 
                             Runnable signalGeneratorTask = () -> {
+                                int planChoose = 0;
+                                int messagesAfterDeposit = 0;
+                                try {
+                                    planChoose = currentUser.getTariffUsed();
+                                    messagesAfterDeposit = currentUser.getMessagesAfterDeposit();
+                                } catch (Exception e) {
+                                    currentUser.setTariffUsed(0);
+                                    currentUser.setMessagesAfterDeposit(0);
+                                    jedis.set(userKey, convertUserToJson(currentUser));
+                                    bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
+                                    e.printStackTrace();
+                                }
                                 bot.execute(new SendMessage(playerId, "\uD83D\uDFE2").parseMode(HTML));
                                 try {
                                     Thread.sleep(1500);
