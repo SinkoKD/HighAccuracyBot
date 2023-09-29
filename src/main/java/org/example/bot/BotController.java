@@ -435,16 +435,7 @@ public class BotController {
                             Instant currentInstant = Instant.now();
                             LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
                             List<String> listOfPairs = new ArrayList<>();
-                            int modeChoose = 1;
-                            try {
-                                 modeChoose = currentUser.getModeChoose();
-                            } catch (Exception e) {
-                                currentUser.setTariffUsed(0);
-                                currentUser.setMessagesAfterDeposit(0);
-                                jedis.set(userKey, convertUserToJson(currentUser));
-                                bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
-                                e.printStackTrace();
-                            }
+                            int modeChoose = currentUser.getModeChoose();
 
                             if (modeChoose == 1) {
                                 listOfPairs.addAll(Arrays.asList(
