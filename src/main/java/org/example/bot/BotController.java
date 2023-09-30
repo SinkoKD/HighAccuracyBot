@@ -89,9 +89,6 @@ public class BotController {
                             String updatedUser = convertUserToJson(checkedUser);
                             jedis.set(userKey, updatedUser);
                         } catch (Exception e) {
-                            String userKey = USER_DB_MAP_KEY + ":" + playerId;
-                            User checkedUser = convertJsonToUser(jedis.get(userKey));
-                            bot.execute(new SendMessage(AdminID, convertUserToJson(checkedUser)));
                             e.printStackTrace();
                         }
                     } else {
