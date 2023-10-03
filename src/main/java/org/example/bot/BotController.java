@@ -577,7 +577,9 @@ public class BotController {
                                         button3.callbackData("Advanced");
                                         InlineKeyboardButton button4 = new InlineKeyboardButton("Pro - 60$");
                                         button4.callbackData("Pro");
-                                        inlineKeyboardMark.addRow(button2, button3, button4);
+                                        inlineKeyboardMark.addRow(button2);
+                                        inlineKeyboardMark.addRow(button3);
+                                        inlineKeyboardMark.addRow(button4);
                                         bot.execute(new SendMessage(playerId, "<b>\uD83D\uDE0A I want to remind you that you " +
                                                 "can improve the accuracy of signals!" +
                                                 " To do that, you just need to change your plan. Simply click on the plan that " +
