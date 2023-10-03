@@ -377,11 +377,11 @@ public class BotController {
                                 inlineKeyboardMarkup.addRow(button22);
                                 inlineKeyboardMarkup.addRow(button23);
                                 inlineKeyboardMarkup.addRow(button24);
-//                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
-//                                        "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
-//                                        "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
-//                                        "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
-//                                        "<i>Please choose the plan that suits you best! </i> \n\n You can always change the plan via /upgrade command. \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                                bot.execute(new SendMessage(tgID, "\uD83D\uDE80 Please choose the plan you'd like to work with!\uD83D\uDCCB\n" +
+                                        "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
+                                        "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
+                                        "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
+                                        "<i>Please choose the plan that suits you best! </i> \n\n You can always change the plan via /upgrade command. \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
 
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -561,29 +561,29 @@ public class BotController {
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
                                         new String[]{"/newsignal"});
                                 bot.execute(new SendMessage(playerId, "<b>Start!</b>").replyMarkup(replyKeyboardMarkup).parseMode(HTML));
-//                                if (planChoose == 0){
-//                                    if (messagesAfterDeposit < 5){
-//                                        currentUser.setMessagesAfterDeposit(messagesAfterDeposit + 1);
-//                                        jedis.set(userKey, convertUserToJson(currentUser));
-//                                    } else if (messagesAfterDeposit == 5 ) {
-//                                        InlineKeyboardMarkup inlineKeyboardMark = new InlineKeyboardMarkup();
-//                                        InlineKeyboardButton button2 = new InlineKeyboardButton("Basic - 0$");
-//                                        button2.callbackData("Basic");
-//                                        InlineKeyboardButton button3 = new InlineKeyboardButton("Advanced - 35$");
-//                                        button3.callbackData("Advanced");
-//                                        InlineKeyboardButton button4 = new InlineKeyboardButton("Pro - 60$");
-//                                        button4.callbackData("Pro");
-//                                        inlineKeyboardMark.addRow(button2, button3, button4);
-//                                        bot.execute(new SendMessage(playerId, "<b>\uD83D\uDE0A I want to remind you that you " +
-//                                                "can improve the accuracy of signals!" +
-//                                                " To do that, you just need to change your plan. Simply click on the plan that " +
-//                                                "suits you best from the options below.\uD83D\uDCC8. You also can do it via /upgrade command.\n\n</b>" +
-//                                                "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
-//                                                "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
-//                                                "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n")
-//                                                .replyMarkup(replyKeyboardMarkup).parseMode(HTML).replyMarkup(inlineKeyboardMark));
-//                                    }
-//                                }
+                                if (planChoose == 0){
+                                    if (messagesAfterDeposit < 5){
+                                        currentUser.setMessagesAfterDeposit(messagesAfterDeposit + 1);
+                                        jedis.set(userKey, convertUserToJson(currentUser));
+                                    } else if (messagesAfterDeposit == 5 ) {
+                                        InlineKeyboardMarkup inlineKeyboardMark = new InlineKeyboardMarkup();
+                                        InlineKeyboardButton button2 = new InlineKeyboardButton("Basic - 0$");
+                                        button2.callbackData("Basic");
+                                        InlineKeyboardButton button3 = new InlineKeyboardButton("Advanced - 35$");
+                                        button3.callbackData("Advanced");
+                                        InlineKeyboardButton button4 = new InlineKeyboardButton("Pro - 60$");
+                                        button4.callbackData("Pro");
+                                        inlineKeyboardMark.addRow(button2, button3, button4);
+                                        bot.execute(new SendMessage(playerId, "<b>\uD83D\uDE0A I want to remind you that you " +
+                                                "can improve the accuracy of signals!" +
+                                                " To do that, you just need to change your plan. Simply click on the plan that " +
+                                                "suits you best from the options below.\uD83D\uDCC8. You also can do it via /upgrade command.\n\n</b>" +
+                                                "<b>Basic - Signals with accuracy from 50% to 94% - Price: $0 \uD83C\uDD93\n" +
+                                                "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
+                                                "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n")
+                                                .replyMarkup(replyKeyboardMarkup).parseMode(HTML).replyMarkup(inlineKeyboardMark));
+                                    }
+                                }
                             };
                             new Thread(signalGeneratorTask).start();
                         } else if (messageText.equals("/changeMode") || messageText.equals("/changemode")) {
