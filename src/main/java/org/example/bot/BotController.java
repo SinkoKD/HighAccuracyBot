@@ -562,10 +562,14 @@ public class BotController {
                                         new String[]{"/newsignal"});
                                 bot.execute(new SendMessage(playerId, "<b>Start!</b>").replyMarkup(replyKeyboardMarkup).parseMode(HTML));
                                 if (planChoose == 0){
+                                    System.out.println("Im planChoose == 0");
+                                    System.out.println(messagesAfterDeposit);
                                     if (messagesAfterDeposit < 5){
                                         currentUser.setMessagesAfterDeposit(messagesAfterDeposit + 1);
                                         jedis.set(userKey, convertUserToJson(currentUser));
+                                        System.out.println("Deposit +1");
                                     } else if (messagesAfterDeposit == 5 ) {
+                                        System.out.println("Done!");
                                         InlineKeyboardMarkup inlineKeyboardMark = new InlineKeyboardMarkup();
                                         InlineKeyboardButton button2 = new InlineKeyboardButton("Basic - 0$");
                                         button2.callbackData("Basic");
@@ -582,6 +586,7 @@ public class BotController {
                                                 "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
                                                 "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n")
                                                 .replyMarkup(replyKeyboardMarkup).parseMode(HTML).replyMarkup(inlineKeyboardMark));
+                                        System.out.println("Done 2");
                                     }
                                 }
                             };
