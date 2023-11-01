@@ -10,15 +10,14 @@ import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZoneId;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static com.pengrad.telegrambot.model.request.ParseMode.HTML;
@@ -30,7 +29,6 @@ public class BotController {
 
     public static JedisPool jedisPool;
     public static final String USER_DB_MAP_KEY = "userDBMap";
-    public static ArrayList<Long> allUsers = new ArrayList<>();
 
     public static void main(String[] args) throws URISyntaxException {
         String TOKEN = "";
@@ -96,14 +94,14 @@ public class BotController {
                     }
 
 
-//                    String userKeyAdmin = USER_DB_MAP_KEY + ":" + AdminID;
-//                    Date adminDate = new Date();
-//                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50);
-//                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
+                    String userKeyAdmin = AdminID;
+                    Date adminDate = new Date();
+                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50, 1, 1);
+                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
 
 
                     try {
-                        String userKey = USER_DB_MAP_KEY + ":" + AdminID;
+                        String userKey = AdminID;
                         User checkedAdmin = convertJsonToUser(jedis.get(userKey));
                         Date currentDate = new Date();
                         Date checkAdminDate = DateUtil.addDays(checkedAdmin.getLastTimeTexted(), 2);
@@ -297,10 +295,10 @@ public class BotController {
                         } else if (messageText.startsWith("setCheckForUID:")) {
                             try {
                                 long newCheck = Integer.parseInt(messageText.substring(15));
-                                User adminUser = convertJsonToUser(jedis.get(USER_DB_MAP_KEY + ":" +AdminID));
+                                User adminUser = convertJsonToUser(jedis.get(AdminID));
                                 adminUser.setUID(String.valueOf(newCheck));
                                 String updatedAdminUser = convertUserToJson(adminUser);
-                                jedis.set( USER_DB_MAP_KEY + ":" + AdminID, updatedAdminUser);
+                                jedis.set(AdminID, updatedAdminUser);
                                 bot.execute(new SendMessage(AdminID, "First numbers is: " + newCheck + "."));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(AdminID, "❌ There was an issue. Please try again. "));
@@ -402,9 +400,6 @@ public class BotController {
                         InlineKeyboardButton button32 = new InlineKeyboardButton("Next Step!");
                         button32.callbackData("RegisterMe");
                         inlineKeyboardMarkup.addRow(button32);
-                        if (!allUsers.contains(playerId)) {
-                            allUsers.add(playerId);
-                        }
                         bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Hey, " + playerName + "\n" +
                                 "\n" +
                                 "\uD83D\uDCC8 I am the HighAccuracyTrade Bot, and I am created to provide highly accurate trading signals. " +
@@ -418,7 +413,7 @@ public class BotController {
                         if (messageText.equals("/newSignal") || messageCallbackText.equals("getSignal") || messageText.equals("/newsignal")) {
                             String userKey = USER_DB_MAP_KEY + ":" + playerId;
                             User currentUser = convertJsonToUser(jedis.get(userKey));
-                         //   LocalTime currentTime = LocalTime.now().withNano(0).withSecond(0);
+                            //   LocalTime currentTime = LocalTime.now().withNano(0).withSecond(0);
                             TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
                             Instant currentInstant = Instant.now();
                             LocalTime currentTime = currentInstant.atZone(ZoneId.of("UTC")).toLocalTime();
@@ -488,18 +483,18 @@ public class BotController {
                                 int randomAccuracy = 50;
                                 if (planChoose == 0) {
                                     randomAccuracy = random.nextInt(44) + 50;
-                                    if (randomAccuracy >= 80 ) {
+                                    if (randomAccuracy >= 80) {
                                         randomAccuracy = random.nextInt(44) + 50;
                                     }
-                                    if (randomAccuracy >= 80 ) {
+                                    if (randomAccuracy >= 80) {
                                         randomAccuracy = random.nextInt(44) + 50;
                                     }
-                                    if (randomAccuracy >= 80 ) {
+                                    if (randomAccuracy >= 80) {
                                         randomAccuracy = random.nextInt(44) + 50;
                                     }
                                 } else if (planChoose == 1) {
                                     randomAccuracy = random.nextInt(19) + 80;
-                                    if (randomAccuracy >= 90 ) {
+                                    if (randomAccuracy >= 90) {
                                         randomAccuracy = random.nextInt(19) + 80;
                                     }
                                 } else if (planChoose == 2) {
@@ -550,14 +545,14 @@ public class BotController {
                                 Keyboard replyKeyboardMarkup = (Keyboard) new ReplyKeyboardMarkup(
                                         new String[]{"/newsignal"});
                                 bot.execute(new SendMessage(playerId, "<b>Start!</b>").replyMarkup(replyKeyboardMarkup).parseMode(HTML));
-                                if (planChoose == 0){
+                                if (planChoose == 0) {
                                     System.out.println("Im planChoose == 0");
                                     System.out.println(messagesAfterDeposit);
-                                    if (messagesAfterDeposit < 5){
+                                    if (messagesAfterDeposit < 5) {
                                         currentUser.setMessagesAfterDeposit(messagesAfterDeposit + 1);
                                         jedis.set(userKey, convertUserToJson(currentUser));
                                         System.out.println("Deposit +1");
-                                    } else if (messagesAfterDeposit == 5 ) {
+                                    } else if (messagesAfterDeposit == 5) {
                                         System.out.println("Done!");
                                         InlineKeyboardMarkup inlineKeyboardMark = new InlineKeyboardMarkup();
                                         InlineKeyboardButton button2 = new InlineKeyboardButton("Basic - 0$");
@@ -695,16 +690,16 @@ public class BotController {
                         } else if (messageCallbackText.equals("Pro")) {
                             try {
 
-                                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                                    InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
-                                    button22.callbackData("Next");
+                                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                InlineKeyboardButton button22 = new InlineKeyboardButton("Next!");
+                                button22.callbackData("Next");
                                 inlineKeyboardMarkup.addRow(button22);
                                 bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
-                                            "Now, to obtain it, please pay $60 using your preferred payment method below. " +
+                                        "Now, to obtain it, please pay $60 using your preferred payment method below. " +
                                         "\n\n<b>BTC</b>\n<code>bc1qfw4n83tjzq0nu4z2e8nutrgj34hw4flfmm4yrw</code>\n\n<b>USDT ERC20</b>\n<code>0x02e4eEC69E5b31048bab05a133b85B7996baEf42</code>\n\n  " +
                                         "<i>Important! Please consider any transaction fees," +
-                                            " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
-                                            "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                                        " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
+                                        "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
                                 e.printStackTrace();
@@ -778,7 +773,7 @@ public class BotController {
                             //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
-                        } else if ( (!messageText.startsWith("/") && !messageText.equals("/changemode")) && ((messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11))) {
+                        } else if ((!messageText.startsWith("/") && !messageText.equals("/changemode")) && ((messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11))) {
                             try {
                                 InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                                 InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
@@ -790,7 +785,7 @@ public class BotController {
                                 uid = text.substring(2, 10);
                                 Date date = new Date();
                                 Date depositDate = DateUtil.addDays(date, -1);
-                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50, 0 , 0);
+                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50, 0, 0);
                                 bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
                                 jedis.set(userKey, convertUserToJson(newUser));
@@ -823,7 +818,7 @@ public class BotController {
                             try {
                                 User user = convertJsonToUser(jedis.get(userKey));
                                 String sendAdminUID = user.getUID();
-                                User adminUser = convertJsonToUser(jedis.get(USER_DB_MAP_KEY + ":" + AdminID));
+                                User adminUser = convertJsonToUser(jedis.get(AdminID));
 
                                 if (Integer.parseInt(sendAdminUID.substring(0, 2)) >= Integer.parseInt(adminUser.getUID())) {
                                     bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE2 want to register. Write 'A11111111' (telegram id) to approve and 'D1111111' to disapprove").parseMode(HTML));
