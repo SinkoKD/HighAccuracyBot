@@ -94,10 +94,10 @@ public class BotController {
                     }
 
 
-                    String userKeyAdmin = AdminID;
-                    Date adminDate = new Date();
-                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50, 1, 1);
-                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
+//                    String userKeyAdmin = AdminID;
+//                    Date adminDate = new Date();
+//                    User adminUser2 = new User("Admin", "64", false, false, adminDate, adminDate, 1, true, true, true, 1, 50, 1, 1);
+//                    jedis.set(userKeyAdmin, convertUserToJson(adminUser2));
 
 
                     try {
