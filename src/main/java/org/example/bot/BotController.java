@@ -19,6 +19,8 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.pengrad.telegrambot.model.request.ParseMode.HTML;
 import static org.example.bot.DateUtil.isWithinTradingHours;
@@ -720,7 +722,6 @@ public class BotController {
                             }
                         }
 
-
                     } else if (userRegistered(playerId)) {
                         if (messageCallbackText.equals("IDeposit")) {
                             try {
@@ -744,7 +745,6 @@ public class BotController {
                                         bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Please wait 30 minutes before next time pressing button."));
                                     }
                                 }
-
 
                             } catch (Exception e) {
                                 bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again. "));
@@ -770,49 +770,8 @@ public class BotController {
                                     "\uD83E\uDD16\uD83D\uDD17 Make sure to register using the button below or the link in the message. Otherwise, we won't be able to verify that you've joined the team.  \n" +
                                     "\n" +
                                     "‼️ Please keep in mind that if you already have an existing Pocket Option account, you can delete it and create a new one. Afterward, you can go through the personality verification process again in your new account. This procedure of deleting and creating a new account is authorized and allowed by Pocket Option administrators. \uD83D\uDD04\uD83D\uDCCB").replyMarkup(inlineKeyboardMarkup).parseMode(HTML).disableWebPagePreview(true));
-                            //
                         } else if (messageCallbackText.equals("ImRegistered")) {
                             bot.execute(new SendMessage(playerId, "\uD83C\uDD94\uD83D\uDCEC Okay! Now, please send me your Pocket Option ID in the format <i>ID12345678</i>. ").parseMode(HTML));
-                        } else if ((!messageText.startsWith("/") && !messageText.equals("/changemode")) && ((messageText.startsWith("ID") || messageText.startsWith("id") || messageText.startsWith("Id") || messageText.startsWith("iD") && messageText.length() == 10 || messageText.length() == 11))) {
-                            try {
-                                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                                InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
-                                InlineKeyboardButton button6 = new InlineKeyboardButton("No");
-                                button5.callbackData("YesIM");
-                                button6.callbackData("ImRegistered");
-                                inlineKeyboardMarkup.addRow(button5, button6);
-                                String text = messageText.replaceAll("\\s", "");
-                                uid = text.substring(2, 10);
-                                Date date = new Date();
-                                Date depositDate = DateUtil.addDays(date, -1);
-                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50, 0, 0);
-                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
-                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
-                                jedis.set(userKey, convertUserToJson(newUser));
-                            } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
-                                e.printStackTrace();
-                            }
-                        } else if ((!messageText.startsWith("/") && !messageText.equals("/changemode")) && (messageText.startsWith("user") || messageText.startsWith("USER") && messageText.length() == 12 || messageText.length() == 13)) {
-                            try {
-                                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-                                InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
-                                InlineKeyboardButton button6 = new InlineKeyboardButton("No");
-                                button5.callbackData("YesIM");
-                                button6.callbackData("ImRegistered");
-                                inlineKeyboardMarkup.addRow(button5, button6);
-                                String text = messageText.replaceAll("\\s", "");
-                                uid = text.substring(4, 12);
-                                Date date = new Date();
-                                Date depositDate = DateUtil.addDays(date, -1);
-                                User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50, 0, 0);
-                                bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
-                                String userKey = USER_DB_MAP_KEY + ":" + playerId;
-                                jedis.set(userKey, convertUserToJson(newUser));
-                            } catch (Exception e) {
-                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
-                                e.printStackTrace();
-                            }
                         } else if (messageCallbackText.equals("YesIM")) {
                             String userKey = USER_DB_MAP_KEY + ":" + playerId;
                             try {
@@ -840,6 +799,32 @@ public class BotController {
                             }
                         } else if (messageText.startsWith("/") || messageText.equals("Get Signal")) {
                             bot.execute(new SendMessage(playerId, "Before you can try any signals, it's essential to complete the registration process. \uD83D\uDCDD\uD83D\uDD10"));
+                        } else {
+                            try {
+                                Pattern pattern = Pattern.compile("\\d{8}");
+                                Matcher matcher = pattern.matcher(messageText);
+                                if (matcher.find()) {
+                                    uid = matcher.group();
+                                    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                    InlineKeyboardButton button5 = new InlineKeyboardButton("Yes");
+                                    InlineKeyboardButton button6 = new InlineKeyboardButton("No");
+                                    button5.callbackData("YesIM");
+                                    button6.callbackData("ImRegistered");
+                                    inlineKeyboardMarkup.addRow(button5, button6);
+                                    Date date = new Date();
+                                    Date depositDate = DateUtil.addDays(date, -1);
+                                    User newUser = new User(playerName, uid, false, false, date, depositDate, 1, true, true, true, 1, 50, 0, 0);
+                                    bot.execute(new SendMessage(playerId, "\uD83D\uDCCC Is your ID " + uid + " correct? ✅\uD83C\uDD94").replyMarkup(inlineKeyboardMarkup).parseMode(HTML));
+                                    String userKey = USER_DB_MAP_KEY + ":" + playerId;
+                                    jedis.set(userKey, convertUserToJson(newUser));
+                                } else {
+                                    bot.execute(new SendMessage(playerId, "❌ There was an issue. Please try again.  "));
+                                }
+                            } catch (Exception e) {
+                                bot.execute(new SendMessage(playerId, "❌ There was an issue. Please send me your ID again." +
+                                        " Follow the instructions to continue "));
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
