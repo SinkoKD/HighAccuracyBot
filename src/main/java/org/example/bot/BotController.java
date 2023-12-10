@@ -674,8 +674,8 @@ public class BotController {
                                     inlineKeyboardMarkup.addRow(button22);
                                     bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Advanced\" plan. " +
                                             "Now, to obtain it, please pay $35 using your preferred payment method below.\n\n" +
-                                            "<b>BTC</b>\n<code>bc1qfw4n83tjzq0nu4z2e8nutrgj34hw4flfmm4yrw</code>\n\n" +
-                                            "<b>USDT ERC20</b>\n<code>0x02e4eEC69E5b31048bab05a133b85B7996baEf42</code>\n\n " +
+                                            "<b>BTC</b>\n<code>17VWPJSYUsNfzRowjkyiBzfiNZfMRsZae2</code>\n\n" +
+                                            "<b>USDT TRC20</b>\n<code>TCSMPkozESsGGgUDCDvjvWywrn9qX558qJ</code>\n\n " +
                                             "<i>Important! Please consider any transaction fees," +
                                             " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
                                             "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
@@ -698,7 +698,7 @@ public class BotController {
                                 inlineKeyboardMarkup.addRow(button22);
                                 bot.execute(new SendMessage(playerId, "<b>\uD83D\uDFE2 Awesome! You have chosen the \"Pro\" plan. " +
                                         "Now, to obtain it, please pay $60 using your preferred payment method below. " +
-                                        "\n\n<b>BTC</b>\n<code>bc1qfw4n83tjzq0nu4z2e8nutrgj34hw4flfmm4yrw</code>\n\n<b>USDT ERC20</b>\n<code>0x02e4eEC69E5b31048bab05a133b85B7996baEf42</code>\n\n  " +
+                                        "\n\n<b>BTC</b>\n<code>17VWPJSYUsNfzRowjkyiBzfiNZfMRsZae2</code>\n\n<b>USDT TRC20</b>\n<code>TCSMPkozESsGGgUDCDvjvWywrn9qX558qJ</code>\n\n  " +
                                         "<i>Important! Please consider any transaction fees," +
                                         " if the amount received is less than the required sum, the plan won't be activated! </i>\n\n \uD83D\uDE0A\uD83D\uDCB3\uD83D\uDE80 " +
                                         "After making the payment, click the \"Next!\" button.</b>").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
