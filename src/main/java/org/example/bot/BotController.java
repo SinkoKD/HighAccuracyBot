@@ -46,7 +46,7 @@ public class BotController {
             e.printStackTrace();
         }
 
-        String redisUriString = System.getenv("REDIS_URL");
+        String redisUriString = "redis://localhost:6379";
         jedisPool = new JedisPool(new URI(redisUriString));
 
         TelegramBot bot = new TelegramBot(TOKEN);
@@ -168,6 +168,12 @@ public class BotController {
                                 System.out.println(messageText.length());
                                 String tgID = messageText.substring(1);
                                 System.out.println(tgID);
+                                String TGId = USER_DB_MAP_KEY + ":" + tgID;
+                                User userBanned = convertJsonToUser(jedis.get(TGId));
+                                Date currentDate = new Date();
+                                userBanned.setLastTimePressedDeposit(DateUtil.addMinutes(currentDate, 30));
+                                String updatedBannedUser = convertUserToJson(userBanned);
+                                jedis.set(TGId, updatedBannedUser);
                                 registrationApprove(Long.parseLong(tgID));
                                 registrationApprove(Long.parseLong(tgID));
                                 bot.execute(new SendMessage(tgID, "✅ Fantastic, your account is confirmed! T" +
@@ -742,7 +748,12 @@ public class BotController {
                                         bot.execute(new SendMessage(Long.valueOf(AdminID), "User with Telegram ID<code>" + playerId + "</code> and UID <code>" + sendAdminUID + "</code> \uD83D\uDFE1 deposited. Write 'Y11111111' (telegram id) to approve and 'N1111111' to disapprove").parseMode(HTML));
                                         bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Awesome! Your deposit will be checked shortly. \uD83C\uDF89\uD83D\uDC4D"));
                                     } else {
-                                        bot.execute(new SendMessage(playerId, "\uD83D\uDCE9 Please wait 30 minutes before next time pressing button."));
+                                        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                                        InlineKeyboardButton button7 = new InlineKeyboardButton("Deposit done");
+                                        button7.callbackData("IDeposit");
+                                        inlineKeyboardMarkup.addRow(button7);
+                                        bot.execute(new SendMessage(playerId, "❌ Something went wrong. Please ensure that you have deposited at least $50 into the new account " +
+                                                "you created through the link, and then click on 'Deposit done'. \uD83D\uDCE5\uD83D\uDCB0✔\uFE0F").replyMarkup(inlineKeyboardMarkup));
                                     }
                                 }
 
