@@ -46,7 +46,8 @@ public class BotController {
             e.printStackTrace();
         }
 
-        String redisUriString = "redis://localhost:6379";
+       // String redisUriString = "redis://localhost:6379";
+        String redisUriString = System.getenv("REDIS_URL");
         jedisPool = new JedisPool(new URI(redisUriString));
 
         TelegramBot bot = new TelegramBot(TOKEN);
