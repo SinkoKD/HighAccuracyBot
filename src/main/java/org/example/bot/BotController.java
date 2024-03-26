@@ -420,7 +420,6 @@ public class BotController {
                         inlineKeyboardMarkup.addRow(button9);
                         inlineKeyboardMarkup.addRow(button8);
                         bot.execute(new SendMessage(playerId, "✨ Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
-
                     } else if (messageCallbackText.equals("card35")) {
                         sendFirstCardInstruction(35,playerId);
                     } else if (messageCallbackText.equals("card60")) {
@@ -902,14 +901,14 @@ public class BotController {
         String callBack = "pay" + amount;
         button32.callbackData(callBack);
         inlineKeyboardMarkup.addRow(button32);
-        new SendMessage(playerId, "How to pay with a card? 📭 It's straightforward, just follow these steps. " +
+        bot.execute( new SendMessage(playerId, "How to pay with a card? 📭 It's straightforward, just follow these steps. " +
                 "If you need help, type /help.\n\n1) Use the @wallet bot for payment. It's Telegram's official payment " +
                 "bot. Go there.\n2) Click on the \"START\" button.\nThen click on \"Open Wallet\".\n3) Now let's purchase " +
                 "cryptocurrency for the payment. To do this, click on \"Add crypto\", then select \"Bank card\".\n4) Select " +
                 "US dollars (USDT).\n5) Input the amount of $" + amount + "💸\n6) Click \"Buy " + amount + " USDT\"\n7) In " +
                 "the final window, click \"Pay with card\". Enter your card details to complete the purchase.\n\n😊👍 After that, " +
                 "return to the bot and you'll see a balance greater than $0. If everything went smoothly, click the \"Ready\"" +
-                " button. If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup);
+                " button. If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
 
     }
 
@@ -918,12 +917,12 @@ public class BotController {
         InlineKeyboardButton button32 = new InlineKeyboardButton("Done!");
         button32.callbackData("Next");
         inlineKeyboardMarkup.addRow(button32);
-        new SendMessage(playerId, "🚀 Next, you need to send the money.\n\n1) In the main menu of " +
+        bot.execute(new SendMessage(playerId, "🚀 Next, you need to send the money.\n\n1) In the main menu of " +
                 "the @wallet bot, tap on \"Send\".\n2) Choose \"External Wallet\".\n3) Select US dollars " +
                 "(USDT).\n4) Paste my address into the top line. Tap to copy: <code>TCSMPkozESsGGgUDCDvjvWywrn9qX558qJ</code>." +
                 "\n5) Enter $" + amount + ". Make sure to send the exact amount; otherwise, the service won't activate.\n6) " +
                 "Everything's set, proceed with the payment.\n\nOnce the transaction is completed, tap on the button labeled " +
-                "\"Done!\". If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup);
+                "\"Done!\". If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
 
     }
 
