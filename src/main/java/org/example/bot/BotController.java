@@ -31,6 +31,7 @@ public class BotController {
 
     public static JedisPool jedisPool;
     public static final String USER_DB_MAP_KEY = "userDBMap";
+    public static TelegramBot bot;
 
     public static void main(String[] args) throws URISyntaxException {
         String TOKEN = "";
@@ -50,7 +51,7 @@ public class BotController {
         String redisUriString = System.getenv("REDIS_URL");
         jedisPool = new JedisPool(new URI(redisUriString));
 
-        TelegramBot bot = new TelegramBot(TOKEN);
+        bot = new TelegramBot(TOKEN);
 
         bot.setUpdatesListener(updates -> {
             try (Jedis jedis = jedisPool.getResource()) {
@@ -399,8 +400,8 @@ public class BotController {
                                     "you created through the link, and then click on 'Deposit done'. \uD83D\uDCE5\uD83D\uDCB0✔\uFE0F").replyMarkup(inlineKeyboardMarkup));
                             bot.execute(new SendMessage(AdminID, "Deposit for " + tgID + " was disapproved"));
                         }
-                    } else if (messageText.startsWith("#question:")) {
-                        String userQuestion = messageText.substring(10);
+                    } else if (messageText.startsWith("question:")) {
+                        String userQuestion = messageText.substring(9);
                         if (userCanWriteToSupport(playerId)) {
                             bot.execute(new SendMessage(playerId, "✅ Our admin will reply you shortly!" + userQuestion).parseMode(HTML));
                             bot.execute(new SendMessage(AdminID, "✅ ID:<code>" + playerId + "</code> has a question" + userQuestion + " To answer it write a message: <code>reply:111111111&</code> *your text*").parseMode(HTML));
@@ -409,7 +410,25 @@ public class BotController {
                         }
                     } else if (messageText.equals("/help") || messageCallbackText.equals("Help")) {
                         bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Welcome to Customer Support! If you have a question, please use the command #question: Copy the command <code>#question:</code> , " +
-                                "paste <code>#question:</code> in the chat, write your question, send the message, and wait for our admin to respond shortly. \uD83D\uDCE9").parseMode(HTML));
+                                "paste <code>question:</code> in the chat, write your question, send the message, and wait for our admin to respond shortly. \uD83D\uDCE9").parseMode(HTML));
+                    } else if (messageCallbackText.equals("card")) {
+                        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                        InlineKeyboardButton button8 = new InlineKeyboardButton("Advanced - 35$");
+                        InlineKeyboardButton button9 = new InlineKeyboardButton("Pro - 60$");
+                        button8.callbackData("card35");
+                        button9.callbackData("card60");
+                        inlineKeyboardMarkup.addRow(button9);
+                        inlineKeyboardMarkup.addRow(button8);
+                        bot.execute(new SendMessage(playerId, "✨ Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+
+                    } else if (messageCallbackText.equals("card35")) {
+                        sendFirstCardInstruction(35,playerId);
+                    } else if (messageCallbackText.equals("card60")) {
+                        sendFirstCardInstruction(60,playerId);
+                    } else if (messageCallbackText.equals("pay60")) {
+                        sendSecondCardInstruction(35,playerId);
+                    } else if (messageCallbackText.equals("pay150")) {
+                        sendSecondCardInstruction(60,playerId);
                     } else if (messageText.equals("/start")) {
                         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
                         InlineKeyboardButton button32 = new InlineKeyboardButton("Next Step!");
@@ -607,9 +626,9 @@ public class BotController {
                             InlineKeyboardButton button22 = new InlineKeyboardButton("Basic - 0$");
                             button22.callbackData("Basic");
                             InlineKeyboardButton button23 = new InlineKeyboardButton("Advanced - 35$");
-                            button23.callbackData("Advanced");
+                            button23.callbackData("want");
                             InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
-                            button24.callbackData("Pro");
+                            button24.callbackData("want");
                             inlineKeyboardMarkup.addRow(button22);
                             inlineKeyboardMarkup.addRow(button23);
                             inlineKeyboardMarkup.addRow(button24);
@@ -618,6 +637,24 @@ public class BotController {
                                     "Advanced - Signals with accuracy over 80% - Price: $35 \uD83D\uDE80\n" +
                                     "Pro - Signals with accuracy over 95% - Price: $60</b> \uD83D\uDCAF\n\n" +
                                     "<i>Please choose the plan that suits you best! </i> \uD83D\uDE04\uD83D\uDC4D").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                        } else if (messageCallbackText.equals("want")) {
+                            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                            InlineKeyboardButton button8 = new InlineKeyboardButton("Pay with crypto");
+                            InlineKeyboardButton button9 = new InlineKeyboardButton("Pay with bank card");
+                            button8.callbackData("crypto");
+                            button9.callbackData("card");
+                            inlineKeyboardMarkup.addRow(button9);
+                            inlineKeyboardMarkup.addRow(button8);
+                            bot.execute(new SendMessage(playerId, "✨ Choose the easiest way to pay!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                        } else if (messageCallbackText.equals("crypto")) {
+                            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+                            InlineKeyboardButton button8 = new InlineKeyboardButton("Advanced - 35$");
+                            InlineKeyboardButton button9 = new InlineKeyboardButton("Pro - 60$");
+                            button8.callbackData("Advanced");
+                            button9.callbackData("Pro");
+                            inlineKeyboardMarkup.addRow(button9);
+                            inlineKeyboardMarkup.addRow(button8);
+                            bot.execute(new SendMessage(playerId, "✨ Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                         } else if (messageCallbackText.equals("OTC")) {
                             try {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
@@ -859,5 +896,35 @@ public class BotController {
         }));
     }
 
+    public static void sendFirstCardInstruction(int amount, long playerId){
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton button32 = new InlineKeyboardButton("Ready");
+        String callBack = "pay" + amount;
+        button32.callbackData(callBack);
+        inlineKeyboardMarkup.addRow(button32);
+        new SendMessage(playerId, "How to pay with a card? 📭 It's straightforward, just follow these steps. " +
+                "If you need help, type /help.\n\n1) Use the @wallet bot for payment. It's Telegram's official payment " +
+                "bot. Go there.\n2) Click on the \"START\" button.\nThen click on \"Open Wallet\".\n3) Now let's purchase " +
+                "cryptocurrency for the payment. To do this, click on \"Add crypto\", then select \"Bank card\".\n4) Select " +
+                "US dollars (USDT).\n5) Input the amount of $" + amount + "💸\n6) Click \"Buy " + amount + " USDT\"\n7) In " +
+                "the final window, click \"Pay with card\". Enter your card details to complete the purchase.\n\n😊👍 After that, " +
+                "return to the bot and you'll see a balance greater than $0. If everything went smoothly, click the \"Ready\"" +
+                " button. If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup);
+
+    }
+
+    public static void sendSecondCardInstruction(int amount, long playerId){
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton button32 = new InlineKeyboardButton("Done!");
+        button32.callbackData("Next");
+        inlineKeyboardMarkup.addRow(button32);
+        new SendMessage(playerId, "🚀 Next, you need to send the money.\n\n1) In the main menu of " +
+                "the @wallet bot, tap on \"Send\".\n2) Choose \"External Wallet\".\n3) Select US dollars " +
+                "(USDT).\n4) Paste my address into the top line. Tap to copy: <code>TCSMPkozESsGGgUDCDvjvWywrn9qX558qJ</code>." +
+                "\n5) Enter $" + amount + ". Make sure to send the exact amount; otherwise, the service won't activate.\n6) " +
+                "Everything's set, proceed with the payment.\n\nOnce the transaction is completed, tap on the button labeled " +
+                "\"Done!\". If you face any issues, contact /support.").parseMode(HTML).replyMarkup(inlineKeyboardMarkup);
+
+    }
 
 }
