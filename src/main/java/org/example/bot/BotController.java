@@ -419,7 +419,7 @@ public class BotController {
                         button9.callbackData("card60");
                         inlineKeyboardMarkup.addRow(button9);
                         inlineKeyboardMarkup.addRow(button8);
-                        bot.execute(new SendMessage(playerId, "✨ Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                        bot.execute(new SendMessage(playerId, "💸 Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                     } else if (messageCallbackText.equals("card35")) {
                         sendFirstCardInstruction(35,playerId);
                     } else if (messageCallbackText.equals("card60")) {
@@ -653,7 +653,7 @@ public class BotController {
                             button9.callbackData("Pro");
                             inlineKeyboardMarkup.addRow(button9);
                             inlineKeyboardMarkup.addRow(button8);
-                            bot.execute(new SendMessage(playerId, "✨ Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
+                            bot.execute(new SendMessage(playerId, "💸 Choose the plan you want to get!").parseMode(HTML).replyMarkup(inlineKeyboardMarkup));
                         } else if (messageCallbackText.equals("OTC")) {
                             try {
                                 String userKey = USER_DB_MAP_KEY + ":" + playerId;
