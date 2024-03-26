@@ -409,7 +409,7 @@ public class BotController {
                             bot.execute(new SendMessage(playerId, "❌ There was an issue. The support is currently unavailable. Please try again later. ").parseMode(HTML));
                         }
                     } else if (messageText.equals("/help") || messageCallbackText.equals("Help")) {
-                        bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Welcome to Customer Support! If you have a question, please use the command #question: Copy the command <code>#question:</code> , " +
+                        bot.execute(new SendMessage(playerId, "\uD83D\uDC4B Welcome to Customer Support! If you have a question, please use the command question: Copy the command <code>question:</code> , " +
                                 "paste <code>question:</code> in the chat, write your question, send the message, and wait for our admin to respond shortly. \uD83D\uDCE9").parseMode(HTML));
                     } else if (messageCallbackText.equals("card")) {
                         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
