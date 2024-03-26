@@ -125,13 +125,13 @@ public class BotController {
                                     if (checkUserDate.getTime() < currentDate.getTime()) {
                                         String userTgID = keyForUser.substring(10);
                                         if (currentUser.isDeposited() && currentUser.getTimesTextWasSent() == 1) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCC8\uD83D\uDCB8\uD83D\uDD52 I've received an update, and now my signals are even more accurate! " +
-                                                    "This presents a fantastic opportunity to earn money. Let's give trading a shot for the next 8 hours.").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83C\uDFC6 Hey there! 🌟 New users, seize the opportunity to upgrade signal accuracy to 94%! Simply use the command /upgrade. 💫").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (currentUser.isDeposited() && currentUser.getTimesTextWasSent() == 2) {
-                                            bot.execute(new SendMessage(userTgID, "\uD83D\uDCC8 The market is currently in fantastic shape! It's the perfect time " +
-                                                    "to trade and potentially make some easy money! " +
-                                                    " There are only 4 hours left until the market is expected to be awesome. Don't miss out! \uD83D\uDCB0\uD83D\uDD52").parseMode(HTML));
+                                            bot.execute(new SendMessage(userTgID, "\uD83C\uDF81 Fantastic news! 🎉 Did you know that 90% of users earn more in the first day than they paid for upgrading my version? Take the leap now with the command /upgrade. ✅").parseMode(HTML));
+                                            increaseTimesWasSent(keyForUser);
+                                        } else if (currentUser.isDeposited() && currentUser.getTimesTextWasSent() == 3) {
+                                            bot.execute(new SendMessage(userTgID, "🔥 Elevate your experience with the most accurate signals! Upgrade now using the /upgrade command. This is the perfect moment to enhance your capabilities! ⭐️").parseMode(HTML));
                                             increaseTimesWasSent(keyForUser);
                                         } else if (currentUser.isRegistered() && currentUser.getTimesTextWasSent() == 1) {
                                             bot.execute(new SendMessage(userTgID, "\uD83D\uDE80\uD83E\uDD11 You're almost there, just one more step to start receiving signals! " +
@@ -368,9 +368,9 @@ public class BotController {
                                 InlineKeyboardButton button22 = new InlineKeyboardButton("Basic - 0$");
                                 button22.callbackData("Basic");
                                 InlineKeyboardButton button23 = new InlineKeyboardButton("Advanced - 35$");
-                                button23.callbackData("Advanced");
+                                button23.callbackData("want");
                                 InlineKeyboardButton button24 = new InlineKeyboardButton("Pro - 60$");
-                                button24.callbackData("Pro");
+                                button24.callbackData("want");
                                 inlineKeyboardMarkup.addRow(button22);
                                 inlineKeyboardMarkup.addRow(button23);
                                 inlineKeyboardMarkup.addRow(button24);
