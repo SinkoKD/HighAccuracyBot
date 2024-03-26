@@ -424,9 +424,9 @@ public class BotController {
                         sendFirstCardInstruction(35,playerId);
                     } else if (messageCallbackText.equals("card60")) {
                         sendFirstCardInstruction(60,playerId);
-                    } else if (messageCallbackText.equals("pay60")) {
+                    } else if (messageCallbackText.equals("pay35")) {
                         sendSecondCardInstruction(35,playerId);
-                    } else if (messageCallbackText.equals("pay150")) {
+                    } else if (messageCallbackText.equals("pay60")) {
                         sendSecondCardInstruction(60,playerId);
                     } else if (messageText.equals("/start")) {
                         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
